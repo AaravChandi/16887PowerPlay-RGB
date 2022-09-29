@@ -70,6 +70,11 @@ public class SHPMotor {
         positionPID = new PositionPID(kP, getPosition(unit));
     }
 
+    public DcMotorEx returnMotor()
+    {
+        return motor;
+    }
+
     public void enablePositionPID(double kP, double kI, double kD) {
         positionPID = new PositionPID(kP, kI, kD, getPosition(unit));
     }

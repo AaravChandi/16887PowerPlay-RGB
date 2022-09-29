@@ -17,11 +17,11 @@ public class CommandBasedTeleOp extends BaseRobot {
         super.init();
 
         // Default command runs when no other commands are scheduled for the subsystem
-//        drive.setDefaultCommand(
-//                new RunCommand(
-//                        () -> drive.mecanum(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x)
-//                )
-//        );
+        drive.setDefaultCommand(
+                new RunCommand(
+                        () -> drive.mecanum(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x)
+                )
+        );
     }
 
     @Override
@@ -52,10 +52,12 @@ public class CommandBasedTeleOp extends BaseRobot {
 //        );
 //
 //        intake.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
-        if (gamepad1.a) {
-            claw.setPower(0.5);
-        } else if (gamepad1.b){
-            claw.setPower(-0.5);
-        } else claw.setPower(0.0);
+//        if (gamepad1.a) {
+//            claw.setPower(0.5);
+//        } else if (gamepad1.b){
+//            claw.setPower(-0.5);
+//        } else claw.setPower(0.0);
+//    }
     }
+
 }
