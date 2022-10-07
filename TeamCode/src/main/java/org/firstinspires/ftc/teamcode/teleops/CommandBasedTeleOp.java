@@ -5,16 +5,26 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.Trigger;
 import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
+import org.openftc.apriltag.AprilTagDetection;
+
+import java.util.ArrayList;
 
 @TeleOp
 public class CommandBasedTeleOp extends BaseRobot {
 
+
     @Override
     public void init() {
         super.init();
+//        ArrayList<AprilTagDetection> currentTag = vision.getTags();
+        //To get the current tag
+        //currentTag.get(0);
+//        telemetry.addData("Current Tag: ", currentTag.get(0));
 
         // Default command runs when no other commands are scheduled for the subsystem
         drive.setDefaultCommand(

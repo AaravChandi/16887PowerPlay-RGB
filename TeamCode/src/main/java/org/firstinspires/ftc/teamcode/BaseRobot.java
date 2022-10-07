@@ -50,7 +50,7 @@ public class BaseRobot extends OpMode {
 
         // Initialize your subsystems and devices
         drive = new DriveSubsystem(hardwareMap);
-       // vision = new VisionSubsystem(hardwareMap);
+        vision = new VisionSubsystem(hardwareMap);
 
 //        arm = new ArmSubsystem(hardwareMap);
 //        scoop = new ScoopSubsystem(hardwareMap);

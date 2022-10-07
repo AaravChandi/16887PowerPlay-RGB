@@ -42,7 +42,6 @@ Spots:
 1 - Tag 7
 2 - Tag 8
 3 - Tag 12
-TODO: Hardcode the ids
  */
 public class AprilTagDetectionPipeline extends OpenCvPipeline {
     private long nativeApriltagPtr;

@@ -119,10 +119,10 @@ public class RRMecanumDrive extends MecanumDrive {
 
         leftFront = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[0]);
         leftRear = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[1]);
-        rightRear = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[2]);
-        rightFront = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[3]);
+        rightFront = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[2]);
+        rightRear = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[3]);
 
-        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
+        motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -288,8 +288,9 @@ public class RRMecanumDrive extends MecanumDrive {
     public void setMotorPowers(double v, double v1, double v2, double v3) {
         leftFront.setPower(v);
         leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        rightFront.setPower(v2);
+        rightRear.setPower(v3);
+
     }
 
     @Override
