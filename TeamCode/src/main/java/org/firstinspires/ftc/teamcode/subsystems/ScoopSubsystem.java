@@ -11,17 +11,15 @@ public class ScoopSubsystem extends Subsystem {
     public final Servo scoop;
 
     public enum State {
-        TOP,
-        MIDDLE,
-        BOTTOM
+        IN,
+        OUT
     }
 
     private State state;
 
     public ScoopSubsystem(HardwareMap hardwareMap) {
         scoop = hardwareMap.get(Servo.class, Constants.Scoop.kScoopName);
-
-        this.state = State.BOTTOM;
+        this.state = State.OUT;
     }
 
     public void setState(State state) {
@@ -31,14 +29,11 @@ public class ScoopSubsystem extends Subsystem {
     @Override
     public void periodic(Telemetry telemetry) {
         switch (state) {
-            case TOP:
-                scoop.setPosition(Constants.Scoop.kTop);
+            case IN:
+                scoop.setPosition(Constants.Scoop.kIn);
                 break;
-            case MIDDLE:
-                scoop.setPosition(Constants.Scoop.kMiddle);
-                break;
-            case BOTTOM:
-                scoop.setPosition(Constants.Scoop.kBottom);
+            case OUT:
+                scoop.setPosition(Constants.Scoop.kOut);
                 break;
         }
     }

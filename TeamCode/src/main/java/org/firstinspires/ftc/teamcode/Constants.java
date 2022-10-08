@@ -42,10 +42,9 @@ public final class Constants {
     }
 
     public static final class Scoop {
-        public static final String kScoopName = "scoop";
+        public static final String kScoopName = "claw";
 
-        public static final double kTop = 0.5;
-        public static final double kMiddle = 0.9;
-        public static final double kBottom = 1.0;
+        public static final double kOut = 1.0;
+        public static final double kIn= 0.25;
     }
 }

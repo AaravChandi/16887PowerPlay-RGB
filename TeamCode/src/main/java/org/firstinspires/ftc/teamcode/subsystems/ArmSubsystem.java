@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 
 public class ArmSubsystem extends Subsystem {
     public final SHPMotor slide;
-    public final SHPMotor actuator;
 
     public enum State {
         TOP,
@@ -36,9 +35,6 @@ public class ArmSubsystem extends Subsystem {
 //        slide.enableProfiling(Constants.Arm.kSlideMaxVelocity);
 
 
-        actuator = new SHPMotor(hardwareMap, Constants.Arm.kActuatorName);
-        actuator.enablePositionPID(Constants.Arm.kActuatorP);
-        actuator.setPositionErrorTolerance(Constants.Arm.kActuatorTolerance);
 
         previousTime = Clock.now();
         setState(State.BOTTOM);
@@ -66,10 +62,6 @@ public class ArmSubsystem extends Subsystem {
         else if (this.state == State.MIDDLE) setState(State.BOTTOM);
     }
 
-    public boolean atSetpoint() {
-        return actuator.atPositionSetpoint();
-    }
-
     public boolean atBottom() {
         return this.state == State.BOTTOM;
     }
@@ -77,25 +69,20 @@ public class ArmSubsystem extends Subsystem {
     @Override
     public void periodic(Telemetry telemetry) {
         telemetry.addData("slide rotations: ", slide.getPosition(MotorUnit.ROTATIONS));
-        telemetry.addData("actuator enc: ", actuator.getPosition(MotorUnit.TICKS));
-        telemetry.addData("arm at setpoint: ", atSetpoint() ? "true" : "false");
         telemetry.addData("time: ", Clock.elapsed(previousTime));
 //        telemetry.addData("profile output: ", slide.followProfile(Clock.elapsed(previousTime)));
 
         switch (state) {
             case TOP:
                 slide.setPosition(Constants.Arm.kSlideTop);
-                actuator.setPosition(Constants.Arm.kActuatorTop);
                 telemetry.addData("state: ", "TOP");
                 break;
             case MIDDLE:
                 slide.setPosition(Constants.Arm.kSlideMiddle);
-                actuator.setPosition(Constants.Arm.kActuatorMiddle);
                 telemetry.addData("state: ", "MIDDLE");
                 break;
             case BOTTOM:
                 slide.setPosition(Constants.Arm.kSlideBottom);
-                actuator.setPosition(Constants.Arm.kActuatorBottom);
                 telemetry.addData("state: ", "BOTTOM");
                 break;
         }
