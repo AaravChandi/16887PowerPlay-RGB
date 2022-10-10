@@ -65,11 +65,11 @@ public class TestingAuto extends BaseRobot {
     public void start() {
         super.start();
 
-        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(90));
+        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(0));
         drive.setPoseEstimate(startPos);
 
         Trajectory parkTraj1 = drive.trajectoryBuilder(startPos)
-                .splineTo(new Vector2d(10, 20), Math.toRadians(90))
+                .splineTo(new Vector2d(10, 30), Math.toRadians(0))
                 .build();
 
         CommandScheduler.getInstance().scheduleCommand(

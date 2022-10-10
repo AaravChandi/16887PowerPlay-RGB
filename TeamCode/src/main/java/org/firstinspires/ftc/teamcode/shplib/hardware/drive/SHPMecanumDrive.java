@@ -11,9 +11,9 @@ public class SHPMecanumDrive extends SHPFourWheelDrive {
     public void mecanum(double leftY, double leftX, double rightX) {
         double[] powers = {
                 leftY - leftX + rightX,
-                -leftY + leftX + rightX,
+                -leftY + leftX + rightX, //-
                 leftY + leftX - rightX,
-                -leftY - leftX - rightX,
+                -leftY - leftX - rightX, //-
         };
 
         setAll(powers);
