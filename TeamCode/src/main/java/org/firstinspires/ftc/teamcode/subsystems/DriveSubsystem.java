@@ -35,6 +35,11 @@ public class DriveSubsystem extends Subsystem {
 //        drive.mecanum(leftY, leftX, rightX); // robot oriented
     }
 
+    public void normalmecanum(double leftY, double leftX, double rightX) {
+        int speed = 1;
+        drive.mecanum(leftY, leftX, rightX); // robot oriented
+    }
+
     @Override
     public void periodic(Telemetry telemetry) {
         telemetry.addData("heading: ", Math.toDegrees(imu.getYaw()));

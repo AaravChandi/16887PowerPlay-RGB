@@ -4,12 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
-import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
+//import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.Trigger;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
+//import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
 
 @TeleOp
 public class TestTeleOp extends BaseRobot {
@@ -45,7 +45,7 @@ public class TestTeleOp extends BaseRobot {
 //        // Dump cargo macro
         new Trigger(gamepad1.b,
                 new RunCommand((() -> {
-                    scoop.setState(ScoopSubsystem.State.IN);}), scoop)
+                    arm.setState(ArmSubsystem.State.TOP);}), arm)
                 //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
                 //.then(new DumpCargoCommand(scoop))
                 //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE))
@@ -54,7 +54,7 @@ public class TestTeleOp extends BaseRobot {
 
         new Trigger(gamepad1.x,
                 new RunCommand((() -> {
-                    scoop.setState(ScoopSubsystem.State.OUT);}), scoop)
+                    arm.setState(ArmSubsystem.State.TOP);}), arm)
                 //        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
                 //        .then(new DumpCargoCommand(scoop))
                 //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE))
@@ -80,20 +80,17 @@ public class TestTeleOp extends BaseRobot {
         );
 
         new Trigger(gamepad1.right_bumper,
-                new RunCommand((() -> {
-                    arm.setState(ArmSubsystem.State.TOP);}), arm)
-                        .then(new DumpCargoCommand(scoop))
-                        .then(new DriveCommand(drive))
-                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-                        .then(new DumpCargoCommand(scoop))
+                new RunCommand((() -> {drive.mecanum(1,0,0);}), drive)
+                        .then(new DriveCommand(drive,0,0.5,0,2))
+                        .then(new DriveCommand(drive,0,0,1,2))
+                //.then(new DriveCommand(drive,0,0,0.5,2))
+                //.then(new DriveCommand(drive))
 
         );
 
         new Trigger(gamepad1.left_bumper,
-                new RunCommand((() -> {drive.mecanum(-0.5,0,0);}), drive)
-                        .then(new DriveCommand(drive))
-                        .then(new DriveCommand(drive))
-
+                new RunCommand((() -> {drive.mecanum(1,0,0);}), drive)
+                        .then(new DriveCommand(drive,0.5,0,0,2))
         );
 
 
