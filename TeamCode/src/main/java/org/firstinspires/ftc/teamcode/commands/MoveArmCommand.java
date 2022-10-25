@@ -10,7 +10,7 @@ public class MoveArmCommand extends Command {
     private double startTime;
 
     public enum Direction {
-        UP, DOWN, TOP, BOTTOM, MIDDLE
+        TOP, BOTTOM, MIDDLE
     }
 
     public MoveArmCommand(ArmSubsystem arm, Direction direction) {
@@ -24,9 +24,7 @@ public class MoveArmCommand extends Command {
     @Override
     public void init() {
         startTime = Clock.now();
-        if (direction == Direction.UP) arm.nextState();
-        else if (direction == Direction.DOWN) arm.previousState();
-        else if (direction == Direction.TOP) arm.setState(ArmSubsystem.State.TOP);
+        if (direction == Direction.TOP) arm.setState(ArmSubsystem.State.TOP);
         else if (direction == Direction.MIDDLE) arm.setState(ArmSubsystem.State.MIDDLE);
         else if (direction == Direction.BOTTOM) arm.setState(ArmSubsystem.State.BOTTOM);
     }

@@ -28,7 +28,7 @@ public class ArmSubsystem extends Subsystem {
     private double previousTime;
 
     public ArmSubsystem(HardwareMap hardwareMap) {
-        slide = new SHPMotor(hardwareMap, Constants.Arm.kSlideName, MotorUnit.ROTATIONS);
+        slide = new SHPMotor(hardwareMap, Constants.Arm.kSlideName, MotorUnit.TICKS);
         slide.enablePositionPID(Constants.Arm.kSlideP);
         slide.setPositionErrorTolerance(Constants.Arm.kSlideTolerance);
 //        slide.enableVelocityPID(Constants.Arm.kSlideP);

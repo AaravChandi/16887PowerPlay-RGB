@@ -8,11 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
+import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRTankDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
+import org.firstinspires.ftc.teamcode.shplib.hardware.drive.SHPMecanumDrive;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 
 public class TestingAuto extends BaseRobot {
     AprilTagDetection currentTag;
-    RRMecanumDrive drive;
+    SHPMecanumDrive drive;
 
     /*public void runOpMode(){
         drive = new RRMecanumDrive(hardwareMap);
@@ -52,7 +54,13 @@ public class TestingAuto extends BaseRobot {
     public void init() {
         //
         super.init();
-        drive = new RRMecanumDrive(hardwareMap);
+        String[] motorNames = new String[]{
+                "leftFront",
+                "leftRear",
+                "rightFront",
+                "rightRear"
+        };
+        drive = new SHPMecanumDrive(hardwareMap, motorNames);
         //To get the current tag
         //currentTag.get(0);
 
@@ -65,21 +73,29 @@ public class TestingAuto extends BaseRobot {
     public void start() {
         super.start();
 
-        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(0));
-        drive.setPoseEstimate(startPos);
+        /*CommandScheduler.getInstance().scheduleCommand(
+                new RunCommand((() -> {drive.mecanum(1,1,1);}), drive)
+                        .then(new DriveCommand(drive,0.5,0,0,0.9))
+                        .then(new DriveCommand(drive,0,0,0,2))
+                        .then(new DriveCommand(drive,0,0.5,0,1))
+                //new FindAprilTagCommand(vision),
 
-        Trajectory parkTraj1 = drive.trajectoryBuilder(startPos)
-                .splineTo(new Vector2d(10, 30), Math.toRadians(0))
-                .build();
+        );*/
 
-        CommandScheduler.getInstance().scheduleCommand(
-                new FindAprilTagCommand(vision)
-                        .then(new RunCommand(() -> {
+
+
+
+
+
+                /*.then(new RunCommand(() -> {
 //                            currentTag = vision.getTags().get(0);
-                            drive.followTrajectory(parkTraj1);
-                        }))
-        );
+
+
+                        }))*/
+
     }
+
+
 
     @Override
     public void loop() {

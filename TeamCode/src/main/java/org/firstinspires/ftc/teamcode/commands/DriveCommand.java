@@ -15,7 +15,7 @@ public class DriveCommand extends Command {
         // You MUST call the parent class constructor and pass through any subsystems you use
         super(drive);
         this.drive = drive;
-        this.leftY = leftY;
+        this.leftY = -leftY;
         this.leftX = leftX;
         this.rightX = rightX;
         this.time = time;
@@ -25,7 +25,7 @@ public class DriveCommand extends Command {
 
     public void init() {
         startTime = Clock.now();
-        drive.normalmecanum(leftY, leftX, rightX);
+        drive.mecanum(0,0,0);
         endTime = time;
 
     }
@@ -33,7 +33,7 @@ public class DriveCommand extends Command {
     // Called repeatedly until isFinished() returns true
     @Override
     public void execute() {
-
+        drive.mecanum(leftY,leftX,rightX);
     }
 
     // Called once after isFinished() returns true
