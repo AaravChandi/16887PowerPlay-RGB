@@ -5,7 +5,7 @@ public final class Constants {
     public static final double kNominalVoltage = 12.0;
 
     // Multiplied by each term before assigning to the controller
-    public static final double kPositionPIDFactor = 1.0 / 100.0;
+    public static final double kPositionPIDFactor = 1.0 / 10000.0;
     public static final double kVelocityPIDFactor = 1.0 / 1000.0;
 
     public static final class Drive {
@@ -32,8 +32,8 @@ public final class Constants {
         public static final double kActuatorP = 5;
         public static final double kActuatorTolerance = 50;
 
-        public static final double kSlideTop = 10;
-        public static final double kSlideMiddle = 5;
+        public static final double kSlideTop = 500;
+        public static final double kSlideMiddle = 200;
         public static final double kSlideBottom = 0;
 
         public static final double kActuatorTop = 2500;

@@ -16,7 +16,6 @@ public class MoveArmCommand extends Command {
     public MoveArmCommand(ArmSubsystem arm, Direction direction) {
         // You MUST call the parent class constructor and pass through any subsystems you use
         super(arm);
-
         this.arm = arm;
         this.direction = direction;
     }
@@ -24,13 +23,13 @@ public class MoveArmCommand extends Command {
     @Override
     public void init() {
         startTime = Clock.now();
-        if (direction == Direction.TOP) arm.setState(ArmSubsystem.State.TOP);
+        if (direction == Direction.TOP) {arm.setState(ArmSubsystem.State.TOP);}
         else if (direction == Direction.MIDDLE) arm.setState(ArmSubsystem.State.MIDDLE);
         else if (direction == Direction.BOTTOM) arm.setState(ArmSubsystem.State.BOTTOM);
     }
 
     @Override
     public boolean isFinished() {
-        return Clock.hasElapsed(startTime, 0.5);
+        return Clock.hasElapsed(startTime, 2);
     }
 }

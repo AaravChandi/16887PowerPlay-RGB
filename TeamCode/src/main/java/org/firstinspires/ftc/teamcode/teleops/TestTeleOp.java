@@ -21,7 +21,9 @@ public class TestTeleOp extends BaseRobot {
     @Override
     public void init() {
         super.init();
-        slide = new SHPMotor(hardwareMap, Constants.Arm.kSlideName, MotorUnit.ROTATIONS);
+        slide = new SHPMotor(hardwareMap, Constants.Arm.kSlideName, MotorUnit.TICKS);
+        slide.enablePositionPID(Constants.Arm.kSlideP);
+        slide.setPositionErrorTolerance(Constants.Arm.kSlideTolerance);
 
         // Default command runs when no other commands are scheduled for the subsystem
         drive.setDefaultCommand(
@@ -34,16 +36,18 @@ public class TestTeleOp extends BaseRobot {
     @Override
     public void start() {
         super.start();
+        slide.resetEncoder();
+
 
         // Add anything that needs to be run a single time when the OpMode starts
     }
 
     @Override
     public void loop() {
+
         // Allows CommandScheduler.run() to be called - DO NOT DELETE!
         super.loop();
-        slide.enablePositionPID(10);
-        if (gamepad1.a) slide.setPosition(2);
+        if (gamepad1.a) slide.setPosition(Constants.Arm.kSlideMiddle);
         telemetry.addData("slide: ", slide.getPosition(MotorUnit.TICKS));
 
 //        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.UP));
@@ -74,6 +78,7 @@ public class TestTeleOp extends BaseRobot {
                 new RunCommand((() -> {
                     arm.setState(ArmSubsystem.State.BOTTOM);}), arm)
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
+                        .then(new DriveCommand(drive, 0, 0.1, 0, 1))
 //                        .then(new DumpCargoCommand(scoop))
                 //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
         );
@@ -82,11 +87,11 @@ public class TestTeleOp extends BaseRobot {
                 new RunCommand((() -> {drive.mecanum(1,1,1);}), drive)
                         .then(new DriveCommand(drive,0,0.1,0,  0.5))
                         .then(new RunCommand(() -> {
-                            slide.setPosition(1);
+                            slide.setPosition(100);
                         }))
                         .then(new DriveCommand(drive,0,-0.1,0,  0.5))
                         .then(new RunCommand(() -> {
-                            slide.setPosition(0);
+                            slide.setPosition(10);
                         }))
 
                 //.then(new DriveCommand(drive,0,0,0.5,2))
