@@ -48,7 +48,7 @@ public class LinearSlideTest extends BaseRobotLinearSlide {
 //        if (gamepad1.a) slide.setPosition(Constants.Arm.kSlideMiddle);//
 //        telemetry.addData("slide: ", slide.getPosition(MotorUnit.TICKS));
 
-        new Trigger(gamepad1.b,new MoveArmCommand(arm, MoveArmCommand.Direction.TOP)
+        new Trigger(gamepad1.b, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP)
                 .then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE))
                 .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
                 //.then(new DumpCargoCommand(scoop))

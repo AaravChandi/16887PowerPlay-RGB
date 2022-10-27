@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.RRTankDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.hardware.drive.SHPMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
@@ -28,27 +29,11 @@ import java.util.ArrayList;
 
 public class TestingAuto extends BaseRobot {
     AprilTagDetection currentTag;
-    SHPMecanumDrive drive;
+    RRMecanumDrive drive;
+    Trajectory traj1;
+    Trajectory traj2;
+    Trajectory traj3;
 
-    /*public void runOpMode(){
-        drive = new RRMecanumDrive(hardwareMap);
-
-        waitForStart();
-        new FindAprilTagCommand(vision);
-
-        if (isStopRequested()) return;
-
-        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(0));
-        drive.setPoseEstimate(startPos);
-
-        Trajectory parkTraj1 = drive.trajectoryBuilder(startPos)
-                .splineTo(new Vector2d(10, 20), Math.toRadians(0))
-                .build();
-        drive.followTrajectory(parkTraj1);
-        return;
-
-
-    } */
 
     @Override
     public void init() {
@@ -60,10 +45,28 @@ public class TestingAuto extends BaseRobot {
                 "rightFront",
                 "rightRear"
         };
-        drive = new SHPMecanumDrive(hardwareMap, motorNames);
+        drive = new RRMecanumDrive(hardwareMap);
         //To get the current tag
         //currentTag.get(0);
 
+        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(90));
+        drive.setPoseEstimate(startPos);
+
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+
+
+        Trajectory traj1 = drive.trajectoryBuilder(startPos)
+                .splineTo(new Vector2d(20, 20), Math.toRadians(90))
+                .build();
+        Trajectory traj2 = drive.trajectoryBuilder(startPos)
+                .forward(10)
+                .strafeRight(10)
+                .build();
+        Trajectory traj3 = drive.trajectoryBuilder(startPos)
+                .forward(10)
+                .strafeLeft(10)
+                .build();
 
 
         //telemetry.addData("Current Tag: ", currentTag.get(0));
@@ -73,14 +76,18 @@ public class TestingAuto extends BaseRobot {
     public void start() {
         super.start();
 
-        /*CommandScheduler.getInstance().scheduleCommand(
-                new RunCommand((() -> {drive.mecanum(1,1,1);}), drive)
-                        .then(new DriveCommand(drive,0.5,0,0,0.9))
-                        .then(new DriveCommand(drive,0,0,0,2))
-                        .then(new DriveCommand(drive,0,0.5,0,1))
-                //new FindAprilTagCommand(vision),
+        CommandScheduler.getInstance().scheduleCommand(
+                new FindAprilTagCommand(vision)
+                        .then(new RunCommand(() -> {
+                            if (vision.getTags().get(0).id == 7)
+                                drive.followTrajectory(traj1);
+                            else if (vision.getTags().get(0).id == 8)
+                                drive.followTrajectory(traj2);
+                            else
+                                drive.followTrajectory(traj3);
 
-        );*/
+                        }))
+        );
 
 
 

@@ -15,6 +15,7 @@ public final class Constants {
                 "rightFront",
                 "rightRear"
         };
+        public static final double kDriveP = 5;
     }
 
     public static final class Vision {
