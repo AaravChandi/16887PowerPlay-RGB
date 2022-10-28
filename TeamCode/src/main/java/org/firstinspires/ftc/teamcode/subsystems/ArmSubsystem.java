@@ -40,6 +40,10 @@ public class ArmSubsystem extends Subsystem {
         setState(State.BOTTOM);
     }
 
+    public void resetEncoder() {
+        slide.resetEncoder();
+    }
+
     public void setState(State state) {
         this.state = state;
         previousTime = Clock.now();
@@ -76,14 +80,17 @@ public class ArmSubsystem extends Subsystem {
             case TOP:
                 slide.setPosition(Constants.Arm.kSlideTop);
                 telemetry.addData("state: ", "TOP");
+                telemetry.addData("slide power: ", slide.getPower());
                 break;
             case MIDDLE:
                 slide.setPosition(Constants.Arm.kSlideMiddle);
                 telemetry.addData("state: ", "MIDDLE");
+                telemetry.addData("slide power: ", slide.getPower());
                 break;
             case BOTTOM:
                 slide.setPosition(Constants.Arm.kSlideBottom);
                 telemetry.addData("state: ", "BOTTOM");
+                telemetry.addData("slide power: ", slide.getPower());
                 break;
         }
     }

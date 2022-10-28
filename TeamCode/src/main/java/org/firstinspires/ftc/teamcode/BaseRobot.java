@@ -29,7 +29,7 @@ public class BaseRobot extends OpMode {
     // Declare subsystems and devices
     public DriveSubsystem drive;
     public VisionSubsystem vision;
-    //public ArmSubsystem arm;
+    public ArmSubsystem arm;
     public ScoopSubsystem scoop;
 
     public SHPMotor intake;
@@ -51,7 +51,7 @@ public class BaseRobot extends OpMode {
         // Initialize your subsystems and devices
         drive = new DriveSubsystem(hardwareMap);
         vision = new VisionSubsystem(hardwareMap);
-        //arm = new ArmSubsystem(hardwareMap);
+        arm = new ArmSubsystem(hardwareMap);
 
 //        scoop = new ScoopSubsystem(hardwareMap);
 //        intake = new SHPMotor(hardwareMap, "intake");

@@ -26,15 +26,15 @@ public final class Constants {
         public static final String kSlideName = "slide";
         public static final String kActuatorName = "actuator";
 
-        public static final double kSlideP = 25;
+        public static final double kSlideP = 36;
         public static final double kSlideTolerance = 0.2;
         public static final double kSlideMaxVelocity = 1;
 
         public static final double kActuatorP = 5;
         public static final double kActuatorTolerance = 50;
 
-        public static final double kSlideTop = 800;
-        public static final double kSlideMiddle = 200;
+        public static final double kSlideTop = 250;
+        public static final double kSlideMiddle = 125;
         public static final double kSlideBottom = 0;
 
         public static final double kActuatorTop = 2500;

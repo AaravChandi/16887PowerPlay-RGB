@@ -28,6 +28,9 @@ public class TestTeleOp extends BaseRobot {
                         () -> drive.mecanum(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x)
                 )
         );
+
+        arm.resetEncoder();
+
     }
 
     @Override
@@ -44,12 +47,12 @@ public class TestTeleOp extends BaseRobot {
         // Allows CommandScheduler.run() to be called - DO NOT DELETE!
         super.loop();
 
-//        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.UP));
-//        new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.DOWN));
+        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
+        new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
 //        new Trigger(gamepad1.b && !arm.atBottom(), new DumpCargoCommand(scoop));
 //
 //        // Dump cargo macro
-        /*new Trigger(gamepad1.b,
+        new Trigger(gamepad1.b,
                 new RunCommand((() -> {
                     arm.setState(ArmSubsystem.State.TOP);}), arm)
                 //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
@@ -80,7 +83,7 @@ public class TestTeleOp extends BaseRobot {
             arm.setState(ArmSubsystem.State.BOTTOM);}), arm)
                 .then(new DriveCommand(drive, 0, 0.25, 0, 1)))
         );
-        */
+
 
         new Trigger(gamepad1.left_bumper,
                 new RunCommand((() -> {drive.normalmecanum(1,1,1);}), drive)

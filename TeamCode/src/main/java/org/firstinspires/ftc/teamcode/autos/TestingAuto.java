@@ -56,16 +56,14 @@ public class TestingAuto extends BaseRobot {
         telemetry.update();
 
 
-        Trajectory traj1 = drive.trajectoryBuilder(startPos)
+        traj1 = drive.trajectoryBuilder(startPos)
                 .splineTo(new Vector2d(20, 20), Math.toRadians(90))
                 .build();
-        Trajectory traj2 = drive.trajectoryBuilder(startPos)
-                .forward(10)
+        traj2 = drive.trajectoryBuilder(startPos)
                 .strafeRight(10)
                 .build();
-        Trajectory traj3 = drive.trajectoryBuilder(startPos)
+        traj3 = drive.trajectoryBuilder(startPos)
                 .forward(10)
-                .strafeLeft(10)
                 .build();
 
 
@@ -76,9 +74,9 @@ public class TestingAuto extends BaseRobot {
     public void start() {
         super.start();
 
-        CommandScheduler.getInstance().scheduleCommand(
-//                new FindAprilTagCommand(vision)
-//                        .then
+        /*CommandScheduler.getInstance().scheduleCommand(
+                new FindAprilTagCommand(vision)
+                        .then
                 (new RunCommand(() -> {
                             if (vision.getTags().get(0).id == 7)
                                 drive.followTrajectory(traj1);
@@ -90,6 +88,13 @@ public class TestingAuto extends BaseRobot {
                                 drive.followTrajectory(traj1);
 
                         }))
+        );*/
+
+        CommandScheduler.getInstance().scheduleCommand((new RunCommand(() ->
+                {
+                    drive.followTrajectory(traj3);
+
+                                }))
         );
 
 
