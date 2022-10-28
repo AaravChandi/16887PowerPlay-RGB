@@ -33,7 +33,7 @@ public final class Constants {
         public static final double kActuatorP = 5;
         public static final double kActuatorTolerance = 50;
 
-        public static final double kSlideTop = 500;
+        public static final double kSlideTop = 800;
         public static final double kSlideMiddle = 200;
         public static final double kSlideBottom = 0;
 

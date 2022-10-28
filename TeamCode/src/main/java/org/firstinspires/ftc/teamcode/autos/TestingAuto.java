@@ -77,14 +77,17 @@ public class TestingAuto extends BaseRobot {
         super.start();
 
         CommandScheduler.getInstance().scheduleCommand(
-                new FindAprilTagCommand(vision)
-                        .then(new RunCommand(() -> {
+//                new FindAprilTagCommand(vision)
+//                        .then
+                (new RunCommand(() -> {
                             if (vision.getTags().get(0).id == 7)
                                 drive.followTrajectory(traj1);
                             else if (vision.getTags().get(0).id == 8)
                                 drive.followTrajectory(traj2);
-                            else
+                            else if (vision.getTags().get(0).id == 12)
                                 drive.followTrajectory(traj3);
+                            else
+                                drive.followTrajectory(traj1);
 
                         }))
         );
