@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 //import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
+import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.Trigger;
@@ -49,7 +50,8 @@ public class TestTeleOp extends BaseRobot {
 
         new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
         new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-//        new Trigger(gamepad1.b && !arm.atBottom(), new DumpCargoCommand(scoop));
+//        new Trigger(gamepad1.dpad_right, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT));
+//        new Trigger(gamepad1.dpad_left, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN));
 //
 //        // Dump cargo macro
         new Trigger(gamepad1.b,
@@ -71,17 +73,18 @@ public class TestTeleOp extends BaseRobot {
                 //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
         );
 
-        new Trigger(gamepad1.y,
+        new Trigger(gamepad1.a,
                 new RunCommand((() -> {
                     arm.setState(ArmSubsystem.State.TOP);}), arm)
-                        .then(new DriveCommand(drive, 0, -0.25, 0, 1))
-                        .then (new WaitCommand(1))
-
-//                        .then(new DumpCargoCommand(scoop))
-                //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-                        .then (new RunCommand((() -> {
-            arm.setState(ArmSubsystem.State.BOTTOM);}), arm)
-                .then(new DriveCommand(drive, 0, 0.25, 0, 1)))
+                        // on the way up
+                        .then (new WaitCommand(0.225))
+                        .then(new DriveCommand(drive, 0, -0.2, 0, 0.75))
+                        .then (new WaitCommand(0.5))
+                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+                        .then (new WaitCommand(0.25))
+                        // on the way down
+                        .then(new DriveCommand(drive, 0, 0.2, 0, 0.75))
+                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
         );
 
 

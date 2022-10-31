@@ -36,11 +36,9 @@ public class DriveSubsystem extends Subsystem {
         ).rotated(-imu.getYaw());
         int speed = 1;
         drive.mecanum(speed*vector.getX(), speed*vector.getY(), speed*rightX); // field oriented
-//        drive.mecanum(leftY, leftX, rightX); // robot oriented
     }
 
     public void normalmecanum(double leftY, double leftX, double rightX) {
-        int speed = 1;
         drive.mecanum(leftY, leftX, rightX); // robot oriented
     }
 

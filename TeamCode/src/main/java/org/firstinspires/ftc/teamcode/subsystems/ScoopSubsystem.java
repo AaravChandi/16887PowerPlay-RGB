@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.shplib.commands.Subsystem;
 
 public class ScoopSubsystem extends Subsystem {
-    public final Servo scoop;
+    public final Servo claw;
 
     public enum State {
         IN,
@@ -18,7 +18,7 @@ public class ScoopSubsystem extends Subsystem {
     private State state;
 
     public ScoopSubsystem(HardwareMap hardwareMap) {
-        scoop = hardwareMap.get(Servo.class, Constants.Scoop.kScoopName);
+        claw = hardwareMap.get(Servo.class, Constants.Scoop.kClawName);
         this.state = State.OUT;
     }
 
@@ -30,10 +30,10 @@ public class ScoopSubsystem extends Subsystem {
     public void periodic(Telemetry telemetry) {
         switch (state) {
             case IN:
-                scoop.setPosition(Constants.Scoop.kIn);
+                claw.setPosition(Constants.Scoop.kIn);
                 break;
             case OUT:
-                scoop.setPosition(Constants.Scoop.kOut);
+                claw.setPosition(Constants.Scoop.kOut);
                 break;
         }
     }

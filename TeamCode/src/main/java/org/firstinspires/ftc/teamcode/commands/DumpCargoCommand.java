@@ -6,21 +6,27 @@ import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
 
 public class DumpCargoCommand extends Command {
     private final ScoopSubsystem scoop;
+    private State state;
     private double startTime;
     boolean pickedUp = false;
 
-    public DumpCargoCommand(ScoopSubsystem scoop) {
+    public enum State {
+        IN,
+        OUT
+    }
+
+    public DumpCargoCommand(ScoopSubsystem scoop, State state) {
         // Pass through any subsystems that are uninterruptible
         super(scoop);
+        this.state = state;
         this.scoop = scoop;
 
     }
 
     @Override
     public void init() {
-        if (Clock.hasElapsed(startTime, 1) && !pickedUp) scoop.setState(ScoopSubsystem.State.IN);
-        else scoop.setState(ScoopSubsystem.State.OUT);
-        pickedUp = !pickedUp;
+        if (state == State.IN) scoop.setState(ScoopSubsystem.State.IN);
+        if (state == State.OUT) scoop.setState(ScoopSubsystem.State.OUT);
     }
 
     @Override

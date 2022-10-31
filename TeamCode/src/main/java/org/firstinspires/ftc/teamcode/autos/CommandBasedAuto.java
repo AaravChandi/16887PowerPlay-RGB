@@ -23,7 +23,7 @@ public class CommandBasedAuto extends BaseRobot {
 
 
         CommandScheduler.getInstance().scheduleCommand(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP)
-                        .then(new DumpCargoCommand(scoop))
+
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
         );
     }
