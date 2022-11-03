@@ -31,9 +31,6 @@ public class TestingAuto extends BaseRobot {
     AprilTagDetection currentTag;
     RRMecanumDrive drive;
     Trajectory traj1;
-    Trajectory traj2;
-    Trajectory traj3;
-
 
     @Override
     public void init() {
@@ -57,18 +54,18 @@ public class TestingAuto extends BaseRobot {
 
 
         traj1 = drive.trajectoryBuilder(startPos)
-                .splineTo(new Vector2d(20, 20), Math.toRadians(90))
-                .build();
-        traj2 = drive.trajectoryBuilder(startPos)
-                .strafeRight(40)
-                .build();
-        traj3 = drive.trajectoryBuilder(startPos)
                 .forward(40)
                 .build();
 
 
         //telemetry.addData("Current Tag: ", currentTag.get(0));
+    /*
+                .splineTo(new Vector2d(20, 20), Math.toRadians(90))
+                .build();
+        traj2 = drive.trajectoryBuilder(startPos)
 
+                .build();
+        traj3 = drive.trajectoryBuilder(startPos)*/
     }
 
     public void start() {
@@ -80,14 +77,17 @@ public class TestingAuto extends BaseRobot {
                 (new RunCommand(() -> {
                             if (vision.getTags().get(0).id == 7) {
                                 drive.followTrajectory(traj1);
-
+                                drive.turn(Math.toRadians(90));
+                                drive.followTrajectory(traj1);
                             }
                             else if (vision.getTags().get(0).id == 8) {
-                                drive.followTrajectory(traj3);
-
+                                drive.followTrajectory(traj1);
                             }
-                            else if (vision.getTags().get(0).id == 12)
-                                drive.followTrajectory(traj2);
+                            else if (vision.getTags().get(0).id == 12){
+                                drive.followTrajectory(traj1);
+                                drive.turn(Math.toRadians(-90));
+                                drive.followTrajectory(traj1);
+                            }
                             else
                                 drive.followTrajectory(traj1);
 
