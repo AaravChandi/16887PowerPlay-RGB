@@ -142,8 +142,8 @@ public class RRMecanumDrive extends MecanumDrive {
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
@@ -289,10 +289,10 @@ public class RRMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(-v);
-        leftRear.setPower(-v1);
-        rightFront.setPower(-v2);
-        rightRear.setPower(-v3);
+        leftFront.setPower(v);
+        leftRear.setPower(v1);
+        rightFront.setPower(v2);
+        rightRear.setPower(v3);
 
     }
 

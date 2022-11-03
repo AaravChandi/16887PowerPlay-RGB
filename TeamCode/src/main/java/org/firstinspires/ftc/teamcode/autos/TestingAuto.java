@@ -60,10 +60,10 @@ public class TestingAuto extends BaseRobot {
                 .splineTo(new Vector2d(20, 20), Math.toRadians(90))
                 .build();
         traj2 = drive.trajectoryBuilder(startPos)
-                .strafeRight(10)
+                .strafeRight(40)
                 .build();
         traj3 = drive.trajectoryBuilder(startPos)
-                .forward(10)
+                .forward(40)
                 .build();
 
 
@@ -74,28 +74,32 @@ public class TestingAuto extends BaseRobot {
     public void start() {
         super.start();
 
-        /*CommandScheduler.getInstance().scheduleCommand(
+        CommandScheduler.getInstance().scheduleCommand(
                 new FindAprilTagCommand(vision)
                         .then
                 (new RunCommand(() -> {
-                            if (vision.getTags().get(0).id == 7)
+                            if (vision.getTags().get(0).id == 7) {
                                 drive.followTrajectory(traj1);
-                            else if (vision.getTags().get(0).id == 8)
-                                drive.followTrajectory(traj2);
-                            else if (vision.getTags().get(0).id == 12)
+
+                            }
+                            else if (vision.getTags().get(0).id == 8) {
                                 drive.followTrajectory(traj3);
+
+                            }
+                            else if (vision.getTags().get(0).id == 12)
+                                drive.followTrajectory(traj2);
                             else
                                 drive.followTrajectory(traj1);
 
                         }))
-        );*/
+        );
 
-        CommandScheduler.getInstance().scheduleCommand((new RunCommand(() ->
+        /*CommandScheduler.getInstance().scheduleCommand((new RunCommand(() ->
                 {
                     drive.followTrajectory(traj3);
 
                                 }))
-        );
+        );*/
 
 
 
