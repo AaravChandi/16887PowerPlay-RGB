@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.shplib.controllers;
 import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 
 public class PIDController {
-    public double kP, kI, kD = 0;
+    private double kP, kI, kD = 0;
 
     private double period = 0; // seconds
     private double integralSum = 0;
@@ -22,6 +22,7 @@ public class PIDController {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
+
     }
 
     private void setPeriod(double period) {
@@ -37,27 +38,31 @@ public class PIDController {
     }
 
     public double calculate(double measurement, double setpoint) {
+        double output = 0;
+
         error = setpoint - measurement;
 
-        // Proportional
-        double output = kP * error;
-
-        if (period > 0) {
+        if (kI > 0 || kD > 0) {
             setPeriod(Clock.elapsed(previousTime));
             previousTime = Clock.now();
+        }
 
-            // + Integral
-            if (kI > 0) {
-                integralSum = integralSum + (error * period);
-                output += (kI * integralSum);
-            }
+        // Proportional
+        if (kP > 0) {
+            output += (kP * error);
+        }
 
-            // + Derivative
-            if (kD > 0) {
-                double derivative = (error - previousError) / period;
-                output += (kD * derivative);
-                previousError = error;
-            }
+        // + Integral
+        if (kI > 0) {
+            integralSum = integralSum + (error * period);
+            output += (kI * integralSum);
+        }
+
+        // + Derivative
+        if (kD > 0) {
+            double derivative = (error - previousError) / period;
+            output += (kD * derivative);
+            previousError = error;
         }
 
         return output;

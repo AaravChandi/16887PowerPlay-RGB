@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
 import org.firstinspires.ftc.teamcode.shplib.hardware.SHPMotor;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-//import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
 
 @TeleOp
 public class TestTeleOp extends BaseRobot {
@@ -47,11 +47,11 @@ public class TestTeleOp extends BaseRobot {
 
         // Allows CommandScheduler.run() to be called - DO NOT DELETE!
         super.loop();
-
         new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
         new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-//        new Trigger(gamepad1.dpad_right, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT));
-//        new Trigger(gamepad1.dpad_left, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN));
+        new Trigger(gamepad1.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
+        new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT));
+        new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN));
 //
 //        // Dump cargo macro
         new Trigger(gamepad1.b,
@@ -80,7 +80,10 @@ public class TestTeleOp extends BaseRobot {
                         .then (new WaitCommand(0.225))
                         .then(new DriveCommand(drive, 0, -0.2, 0, 0.75))
                         .then (new WaitCommand(0.5))
-                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+                        //.then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+                        .then(new RunCommand(() -> {
+                            claw.setPosition(1);
+                        }))
                         .then (new WaitCommand(0.25))
                         // on the way down
                         .then(new DriveCommand(drive, 0, 0.2, 0, 0.75))
@@ -88,12 +91,12 @@ public class TestTeleOp extends BaseRobot {
         );
 
 
-        new Trigger(gamepad1.left_bumper,
+        /*new Trigger(gamepad1.left_bumper,
                 new RunCommand((() -> {drive.normalmecanum(1,1,1);}), drive)
                         .then(new DriveCommand(drive,0.5,0,0,0.9))
                         .then(new DriveCommand(drive,0,0,0,2))
                         .then(new DriveCommand(drive,0,0.5,0,1))
-        );
+        );*/
 
 
 //

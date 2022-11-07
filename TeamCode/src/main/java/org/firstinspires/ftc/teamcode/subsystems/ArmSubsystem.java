@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.shplib.commands.Subsystem;
+import org.firstinspires.ftc.teamcode.shplib.controllers.ElevatorFFController;
 import org.firstinspires.ftc.teamcode.shplib.hardware.SHPMotor;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
 import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
@@ -31,8 +32,9 @@ public class ArmSubsystem extends Subsystem {
         slide = new SHPMotor(hardwareMap, Constants.Arm.kSlideName, MotorUnit.TICKS);
         slide.enablePositionPID(Constants.Arm.kSlideP);
         slide.setPositionErrorTolerance(Constants.Arm.kSlideTolerance);
+        slide.enableFF(new ElevatorFFController(0, Constants.Arm.kSlideG));
 //        slide.enableVelocityPID(Constants.Arm.kSlideP);
-//        slide.enableProfiling(Constants.Arm.kSlideMaxVelocity);
+        //slide.enableProfiling(Constants.Arm.kSlideMaxVelocity);
 
 
 

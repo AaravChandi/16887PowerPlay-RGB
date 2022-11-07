@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -33,9 +32,8 @@ public class SHPMotor {
     private VelocityPID velocityPID;
     private FFController ff;
 
-    private boolean profilingEnabled = false;
-    private double maxVelocity;
-    private double maxAcceleration;
+    private double maxVelocity = 0;
+    private double maxAcceleration = 0;
     private MotionProfile profile;
 
     public SHPMotor(@NonNull HardwareMap hardwareMap, String deviceName) {
@@ -70,9 +68,8 @@ public class SHPMotor {
         positionPID = new PositionPID(kP, getPosition(unit));
     }
 
-    public DcMotorEx returnMotor()
-    {
-        return motor;
+    public void enablePositionPID(double kP, double kD) {
+        positionPID = new PositionPID(kP, 0, kD, getPosition(unit));
     }
 
     public void enablePositionPID(double kP, double kI, double kD) {
@@ -127,11 +124,11 @@ public class SHPMotor {
      * @param power -1.0 to 1.0
      */
     public void setPower(double power) {
+        if (ff != null) power += ff.getStaticOutput(power);
         if (voltageSensor != null)
             power *= (Constants.kNominalVoltage / voltageSensor.getVoltage());
         power = Range.clip(power, -1.0, 1.0);
-        if (getPower() != power)
-            motor.setPower(power);
+        if (getPower() != power) motor.setPower(power);
     }
 
     public double getPower() {
@@ -150,14 +147,10 @@ public class SHPMotor {
     }
 
     public double getVelocity(MotorUnit unit) {
-        if (unit == MotorUnit.DEGREES)
-            return motor.getVelocity(AngleUnit.DEGREES);
-        else if (unit == MotorUnit.RADIANS)
-            return motor.getVelocity(AngleUnit.RADIANS);
-        else if (unit == MotorUnit.ROTATIONS)
-            return motor.getVelocity(AngleUnit.DEGREES) / 360.0;
-        else
-            return motor.getVelocity();
+        if (unit == MotorUnit.DEGREES) return motor.getVelocity(AngleUnit.DEGREES);
+        else if (unit == MotorUnit.RADIANS) return motor.getVelocity(AngleUnit.RADIANS);
+        else if (unit == MotorUnit.ROTATIONS) return motor.getVelocity(AngleUnit.DEGREES) / 360.0;
+        else return motor.getVelocity();
     }
 
     public double setPosition(double position) {
@@ -169,14 +162,11 @@ public class SHPMotor {
     }
 
     public double getPosition(MotorUnit unit) {
-        if (unit == MotorUnit.DEGREES)
-            return motor.getCurrentPosition() / ticksPerRotation * 360;
+        if (unit == MotorUnit.DEGREES) return motor.getCurrentPosition() / ticksPerRotation * 360;
         else if (unit == MotorUnit.RADIANS)
             return Math.toRadians(motor.getCurrentPosition() / ticksPerRotation * 360);
-        else if (unit == MotorUnit.ROTATIONS)
-            return motor.getCurrentPosition() / ticksPerRotation;
-        else
-            return motor.getCurrentPosition();
+        else if (unit == MotorUnit.ROTATIONS) return motor.getCurrentPosition() / ticksPerRotation;
+        else return motor.getCurrentPosition();
     }
 
     public void enableProfiling(double maxVelocity) {
@@ -184,44 +174,45 @@ public class SHPMotor {
     }
 
     public void enableProfiling(double maxVelocity, double maxAcceleration) {
-        profilingEnabled = true;
         this.maxVelocity = maxVelocity;
         this.maxAcceleration = maxAcceleration;
     }
 
     public void disableProfiling() {
-        profilingEnabled = false;
+        this.maxVelocity = 0;
+        this.maxAcceleration = 0;
     }
 
     public void profileTo(double position) {
-        if (!profilingEnabled) return;
-        profile = MotionProfileGenerator.generateSimpleMotionProfile(
-                new MotionState(getPosition(unit), 0, 0),
-                new MotionState(position, 0, 0),
-                maxVelocity,
-                maxAcceleration
-        );
+        if (maxVelocity <= 0) return;
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPosition(unit), 0, 0), new MotionState(position, 0, 0), maxVelocity, maxAcceleration);
     }
 
     public double followProfile(double seconds) {
-        if (!profilingEnabled || profile == null) return 0.0;
+        if (maxVelocity <= 0 || profile == null) return 0.0;
         MotionState state = profile.get(seconds);
         return setVelocity(state.getV());
+    }
+
+    public void reverseDirection() {
+        if (getDirection() == DcMotorEx.Direction.FORWARD)
+            setDirection(DcMotorEx.Direction.REVERSE);
+        else setDirection(DcMotorEx.Direction.FORWARD);
     }
 
     public void setDirection(DcMotorEx.Direction direction) {
         motor.setDirection(direction);
     }
 
-    public DcMotorSimple.Direction getDirection() {
+    public DcMotorEx.Direction getDirection() {
         return motor.getDirection();
     }
 
-    public void setMotorEnable() {
+    public void enableMotor() {
         motor.setMotorEnable();
     }
 
-    public void setMotorDisable() {
+    public void disableMotor() {
         motor.setMotorDisable();
     }
 

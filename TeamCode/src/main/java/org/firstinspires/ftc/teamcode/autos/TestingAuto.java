@@ -76,8 +76,9 @@ public class TestingAuto extends BaseRobot {
                         .then
                 (new RunCommand(() -> {
                             if (vision.getTags().get(0).id == 7) {
-                                drive.followTrajectory(traj1);
                                 drive.turn(Math.toRadians(90));
+                                drive.followTrajectory(traj1);
+                                drive.turn(Math.toRadians(-90));
                                 drive.followTrajectory(traj1);
                             }
                             else if (vision.getTags().get(0).id == 8) {

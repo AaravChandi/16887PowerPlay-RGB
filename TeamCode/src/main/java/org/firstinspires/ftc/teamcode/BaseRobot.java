@@ -35,7 +35,7 @@ public class BaseRobot extends OpMode {
     public SHPMotor intake;
 
 
-    public CRServo claw;
+    public Servo claw;
 
     public double previousTime = 0;
 
@@ -51,12 +51,12 @@ public class BaseRobot extends OpMode {
         // Initialize your subsystems and devices
         drive = new DriveSubsystem(hardwareMap);
         vision = new VisionSubsystem(hardwareMap);
-         arm = new ArmSubsystem(hardwareMap);
-        //scoop = new ScoopSubsystem(hardwareMap);
+        arm = new ArmSubsystem(hardwareMap);
+        scoop = new ScoopSubsystem(hardwareMap);
 //        intake = new SHPMotor(hardwareMap, "intake");
 //        scissorsystem = new ScissorSubsystem(hardwareMap);
 
-        //claw = hardwareMap.get(CRServo.class, "claw");
+        //claw = hardwareMap.get(Servo.class, "claw");
     }
 
     // Called when you press the start button

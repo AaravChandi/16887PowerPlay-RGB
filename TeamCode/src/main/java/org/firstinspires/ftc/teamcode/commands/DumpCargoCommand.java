@@ -8,7 +8,6 @@ public class DumpCargoCommand extends Command {
     private final ScoopSubsystem scoop;
     private State state;
     private double startTime;
-    boolean pickedUp = false;
 
     public enum State {
         IN,
