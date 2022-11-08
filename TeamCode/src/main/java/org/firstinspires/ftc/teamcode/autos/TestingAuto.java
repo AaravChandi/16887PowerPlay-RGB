@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRTankDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
+import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
 import org.firstinspires.ftc.teamcode.shplib.hardware.drive.SHPMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.openftc.apriltag.AprilTagDetection;
@@ -28,20 +29,15 @@ import java.util.ArrayList;
 @Autonomous
 
 public class TestingAuto extends BaseRobot {
-    AprilTagDetection currentTag;
+    int currentTag;
     RRMecanumDrive drive;
-    Trajectory traj1;
+    Trajectory trajForward1, trajForward2, trajBack;
 
     @Override
     public void init() {
         //
         super.init();
-        String[] motorNames = new String[]{
-                "leftFront",
-                "leftRear",
-                "rightFront",
-                "rightRear"
-        };
+
         drive = new RRMecanumDrive(hardwareMap);
         //To get the current tag
         //currentTag.get(0);
@@ -53,66 +49,45 @@ public class TestingAuto extends BaseRobot {
         telemetry.update();
 
 
-        traj1 = drive.trajectoryBuilder(startPos)
-                .forward(40)
+        trajForward1 = drive.trajectoryBuilder(startPos)
+                .forward(60)
+                .build();
+        trajForward2 = drive.trajectoryBuilder(startPos)
+                .forward(30)
+                .build();
+        trajBack = drive.trajectoryBuilder(startPos)
+                .back(30)
                 .build();
 
-
-        //telemetry.addData("Current Tag: ", currentTag.get(0));
-    /*
-                .splineTo(new Vector2d(20, 20), Math.toRadians(90))
-                .build();
-        traj2 = drive.trajectoryBuilder(startPos)
-
-                .build();
-        traj3 = drive.trajectoryBuilder(startPos)*/
     }
 
     public void start() {
         super.start();
 
-        CommandScheduler.getInstance().scheduleCommand(
+        CommandScheduler myCommand = CommandScheduler.getInstance();
+
+        myCommand.scheduleCommand(
                 new FindAprilTagCommand(vision)
-                        .then
-                (new RunCommand(() -> {
-                            if (vision.getTags().get(0).id == 7) {
-                                drive.turn(Math.toRadians(90));
-                                drive.followTrajectory(traj1);
-                                drive.turn(Math.toRadians(-90));
-                                drive.followTrajectory(traj1);
-                            }
-                            else if (vision.getTags().get(0).id == 8) {
-                                drive.followTrajectory(traj1);
-                            }
-                            else if (vision.getTags().get(0).id == 12){
-                                drive.followTrajectory(traj1);
-                                drive.turn(Math.toRadians(-90));
-                                drive.followTrajectory(traj1);
-                            }
-                            else
-                                drive.followTrajectory(traj1);
-
-                        }))
+                        .then(new RunCommand(() -> {
+                                    drive.followTrajectoryAsync(trajForward1);
+                                })
+                        ).then(new WaitCommand(trajForward1.duration()))
+                        .then(new RunCommand(() -> {
+                                    drive.followTrajectoryAsync(trajBack);
+                                })
+                        ).then(new WaitCommand(trajBack.duration()))
+                        .then(new RunCommand(() ->{
+                                    if(vision.getTags().get(0).id == 7) {
+                                        drive.turn(Math.toRadians(-105));
+                                        drive.followTrajectoryAsync(trajForward2);
+                                    }
+                                    else if(vision.getTags().get(0).id == 12) {
+                                        drive.turn(Math.toRadians(105));
+                                        drive.followTrajectoryAsync(trajForward2);
+                                    }
+                                })
+                        )
         );
-
-        /*CommandScheduler.getInstance().scheduleCommand((new RunCommand(() ->
-                {
-                    drive.followTrajectory(traj3);
-
-                                }))
-        );*/
-
-
-
-
-
-
-                /*.then(new RunCommand(() -> {
-//                            currentTag = vision.getTags().get(0);
-
-
-                        }))*/
-
     }
 
 
@@ -123,6 +98,8 @@ public class TestingAuto extends BaseRobot {
         for (AprilTagDetection tag : vision.getTags()) {
             telemetry.addData("Tag ID: ", tag.id);
         }
+
+        drive.update();
     }
     /*
     @Override
@@ -160,7 +137,7 @@ public class TestingAuto extends BaseRobot {
 
          */
 
-    }
+}
 
 
 

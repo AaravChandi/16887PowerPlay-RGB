@@ -59,6 +59,11 @@ public class TestTeleOp extends BaseRobot {
         new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
                 .then (new WaitCommand(0.5))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE)));
+        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
+        new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
+        new Trigger(gamepad1.dpad_right, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT));
+        new Trigger(gamepad1.dpad_left, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN));
+
 //
 //        // Dump cargo macro
         new Trigger(gamepad1.b,
