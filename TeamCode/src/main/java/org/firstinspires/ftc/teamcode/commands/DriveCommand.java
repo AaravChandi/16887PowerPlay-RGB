@@ -10,8 +10,9 @@ public class DriveCommand extends Command {
     private double startTime;
     private double endTime;
     double leftY; double leftX; double rightX; double time;
+    boolean robot = true;
 
-    public DriveCommand(DriveSubsystem drive, double leftY, double leftX, double rightX, double time) {
+    public DriveCommand(DriveSubsystem drive, double leftY, double leftX, double rightX, double time, boolean robot) {
         // You MUST call the parent class constructor and pass through any subsystems you use
         super(drive);
         this.drive = drive;
@@ -19,13 +20,18 @@ public class DriveCommand extends Command {
         this.leftX = leftX;
         this.rightX = rightX;
         this.time = time;
+        this.robot = robot;
     }
 
     // Called once when the command is initially schedule
 
     public void init() {
         startTime = Clock.now();
-        drive.mecanum(0,0,0);
+        if (!robot)
+            drive.mecanum(0,0,0);
+        else
+            drive.normalmecanum(0,0,0);
+
         endTime = time;
 
     }
@@ -33,7 +39,11 @@ public class DriveCommand extends Command {
     // Called repeatedly until isFinished() returns true
     @Override
     public void execute() {
-        drive.mecanum(leftY,leftX,rightX);
+        if (!robot)
+            drive.mecanum(leftY,leftX,rightX);
+        else
+            drive.normalmecanum(leftY,leftX,rightX);
+
     }
 
     // Called once after isFinished() returns true

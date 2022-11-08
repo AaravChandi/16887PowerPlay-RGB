@@ -47,11 +47,18 @@ public class TestTeleOp extends BaseRobot {
 
         // Allows CommandScheduler.run() to be called - DO NOT DELETE!
         super.loop();
-        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
-        new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
+
+        //new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
+        //new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
         new Trigger(gamepad1.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
-        new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT));
-        new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN));
+
+        new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT)
+                .then (new WaitCommand(0.5))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM)));
+
+        new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
+                .then (new WaitCommand(0.5))
+                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE)));
 //
 //        // Dump cargo macro
         new Trigger(gamepad1.b,
@@ -63,30 +70,20 @@ public class TestTeleOp extends BaseRobot {
                 //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
         );
 
-        new Trigger(gamepad1.x,
-                new RunCommand((() -> {
-                    arm.setState(ArmSubsystem.State.TOP);}), arm)
-                        .then(new DriveCommand(drive, 0.1, 0.1, 0.1, 1))
-                //        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
-                //        .then(new DumpCargoCommand(scoop))
-                //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE))
-                //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-        );
-
         new Trigger(gamepad1.a,
                 new RunCommand((() -> {
                     arm.setState(ArmSubsystem.State.TOP);}), arm)
                         // on the way up
-                        .then (new WaitCommand(0.225))
-                        .then(new DriveCommand(drive, 0, -0.2, 0, 0.75))
-                        .then (new WaitCommand(0.5))
-                        //.then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
-                        .then(new RunCommand(() -> {
-                            claw.setPosition(1);
-                        }))
                         .then (new WaitCommand(0.25))
+                        .then(new DriveCommand(drive, 0, -0.4, 0, 0.75, true))
+                        .then (new WaitCommand(0.25))
+                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TopOfShort))
+                        .then (new WaitCommand(0.1))
+                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+
+                        .then (new WaitCommand(0.1))
                         // on the way down
-                        .then(new DriveCommand(drive, 0, 0.2, 0, 0.75))
+                        .then(new DriveCommand(drive, 0, 0.4, 0, 0.75, true))
                         .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
         );
 

@@ -8,9 +8,10 @@ public class MoveArmCommand extends Command {
     private final ArmSubsystem arm;
     private final Direction direction;
     private double startTime;
+    private double endTime;
 
     public enum Direction {
-        TOP, BOTTOM, MIDDLE
+        TOP, BOTTOM, MIDDLE, TopOfShort
     }
 
     public MoveArmCommand(ArmSubsystem arm, Direction direction) {
@@ -18,6 +19,12 @@ public class MoveArmCommand extends Command {
         super(arm);
         this.arm = arm;
         this.direction = direction;
+        if (direction == Direction.MIDDLE)
+            endTime = 0.5;
+        if (direction == Direction.TopOfShort)
+            endTime = 0.5;
+        else
+            endTime = 2;
     }
 
     @Override
@@ -26,10 +33,11 @@ public class MoveArmCommand extends Command {
         if (direction == Direction.TOP) {arm.setState(ArmSubsystem.State.TOP);}
         else if (direction == Direction.MIDDLE) arm.setState(ArmSubsystem.State.MIDDLE);
         else if (direction == Direction.BOTTOM) arm.setState(ArmSubsystem.State.BOTTOM);
+        else if (direction == Direction.TopOfShort) arm.setState(ArmSubsystem.State.TopOfShort);
     }
 
     @Override
     public boolean isFinished() {
-        return Clock.hasElapsed(startTime, 2);
+        return Clock.hasElapsed(startTime, endTime);
     }
 }

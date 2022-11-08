@@ -13,12 +13,12 @@ import org.firstinspires.ftc.teamcode.shplib.hardware.drive.SHPMecanumDrive;
 import org.firstinspires.ftc.teamcode.shplib.hardware.sensors.SHPIMU;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
 
-public class DriveSubsystem extends Subsystem {
-//    private final RRMecanumDrive rr;
+public class RobotDriveSubsystem extends Subsystem {
+    //    private final RRMecanumDrive rr;
     private final SHPMecanumDrive drive;
     private final SHPIMU imu;
 
-    public DriveSubsystem(HardwareMap hardwareMap) {
+    public RobotDriveSubsystem(HardwareMap hardwareMap) {
 //        rr = new RRMecanumDrive(hardwareMap, Constants.Drive.kMotorNames);
         drive = new SHPMecanumDrive(hardwareMap, Constants.Drive.kMotorNames);
         for (int i = 0; i<4; i++)
@@ -28,17 +28,7 @@ public class DriveSubsystem extends Subsystem {
         // Omit Axes arguments for standard orientation
         imu = new SHPIMU(hardwareMap, AxesOrder.ZYX, AxesSigns.PPN);
     }
-
     public void mecanum(double leftY, double leftX, double rightX) {
-        Vector2d vector = new Vector2d(
-                leftY,
-                leftX
-        ).rotated(-imu.getYaw());
-        double speed = 0.5;
-        drive.mecanum(speed*vector.getX(), speed*vector.getY(), speed*rightX); // field oriented
-    }
-
-    public void normalmecanum(double leftY, double leftX, double rightX) {
         drive.mecanum(leftY, leftX, rightX); // robot oriented
     }
 

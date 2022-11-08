@@ -22,6 +22,7 @@ public class ArmSubsystem extends Subsystem {
         TOP,
         MIDDLE,
         BOTTOM,
+        TopOfShort,
     }
 
     private State state;
@@ -82,17 +83,17 @@ public class ArmSubsystem extends Subsystem {
             case TOP:
                 slide.setPosition(Constants.Arm.kSlideTop);
                 telemetry.addData("state: ", "TOP");
-                telemetry.addData("slide power: ", slide.getPower());
                 break;
             case MIDDLE:
-                slide.setPosition(Constants.Arm.kSlideMiddle);
-                telemetry.addData("state: ", "MIDDLE");
-                telemetry.addData("slide power: ", slide.getPower());
+                slide.setPosition(Constants.Arm.kSlideCarry);
+                telemetry.addData("state: ", "Carrying");
                 break;
             case BOTTOM:
                 slide.setPosition(Constants.Arm.kSlideBottom);
                 telemetry.addData("state: ", "BOTTOM");
-                telemetry.addData("slide power: ", slide.getPower());
+                break;
+            case TopOfShort:
+                slide.setPosition(Constants.Arm.kSlideTop-400);
                 break;
         }
     }

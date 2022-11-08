@@ -27,7 +27,7 @@ public final class Constants {
         public static final String kActuatorName = "actuator";
 
         public static final double kSlideP = 12;
-        public static final double kSlideTolerance = 0.1;
+        public static final double kSlideTolerance = 0.05;
         public static final double kSlideMaxVelocity = 1;
         public static final double kSlideG = 0.133;
 
@@ -35,8 +35,8 @@ public final class Constants {
         public static final double kActuatorTolerance = 50;
 
         public static final double kSlideTop = 1200;
-        public static final double kSlideMiddle = 250;
-        public static final double kSlideBottom = 10;
+        public static final double kSlideCarry = 150;
+        public static final double kSlideBottom = 1;
 
         public static final double kActuatorTop = 2500;
         public static final double kActuatorMiddle = 1000;
@@ -46,6 +46,6 @@ public final class Constants {
     public static final class Scoop {
         public static final String kClawName = "claw";
         public static final double kOut = 0.65;
-        public static final double kIn = 0.4;
+        public static final double kIn = 0.3;
     }
 }
