@@ -24,28 +24,23 @@ public final class Constants {
 
     public static final class Arm {
         public static final String kSlideName = "slide";
-        public static final String kActuatorName = "actuator";
 
         public static final double kSlideP = 12;
         public static final double kSlideTolerance = 0.05;
         public static final double kSlideMaxVelocity = 1;
-        public static final double kSlideG = 0.133;
+        public static final double kSlideG = 0.25; //THIS MIGHT BE AN ISSUE
 
-        public static final double kActuatorP = 5;
-        public static final double kActuatorTolerance = 50;
-
-        public static final double kSlideTop = 1200;
+        public static final double kSlideTop = 3800;
+        public static final double kSlideMiddle = 3200;
+        public static final double kSlideShort = 1700;
         public static final double kSlideCarry = 150;
-        public static final double kSlideBottom = 1;
+        public static final double kSlideBottom = 11;
 
-        public static final double kActuatorTop = 2500;
-        public static final double kActuatorMiddle = 1000;
-        public static final double kActuatorBottom = 10;
     }
 
     public static final class Scoop {
         public static final String kClawName = "claw";
         public static final double kOut = 0.65;
-        public static final double kIn = 0.3;
+        public static final double kIn = 1;
     }
 }

@@ -11,7 +11,13 @@ public class MoveArmCommand extends Command {
     private double endTime;
 
     public enum Direction {
-        TOP, BOTTOM, MIDDLE, TopOfShort
+        TOP,
+        MIDDLE,
+        BOTTOM,
+        SHORT,
+        TopOfShort,
+        TopOfMiddle,
+        CARRYING
     }
 
     public MoveArmCommand(ArmSubsystem arm, Direction direction) {
@@ -34,6 +40,9 @@ public class MoveArmCommand extends Command {
         else if (direction == Direction.MIDDLE) arm.setState(ArmSubsystem.State.MIDDLE);
         else if (direction == Direction.BOTTOM) arm.setState(ArmSubsystem.State.BOTTOM);
         else if (direction == Direction.TopOfShort) arm.setState(ArmSubsystem.State.TopOfShort);
+        else if (direction == Direction.TopOfMiddle) arm.setState(ArmSubsystem.State.TopOfMiddle);
+        else if (direction == Direction.SHORT) arm.setState(ArmSubsystem.State.SHORT);
+        else if (direction == Direction.CARRYING) arm.setState(ArmSubsystem.State.CARRYING);
     }
 
     @Override

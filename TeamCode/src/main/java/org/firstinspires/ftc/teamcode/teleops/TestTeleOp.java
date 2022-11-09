@@ -31,6 +31,7 @@ public class TestTeleOp extends BaseRobot {
         );
 
         arm.resetEncoder();
+        telemetry.addData("slide ticks: ", arm.slide.getPosition(MotorUnit.TICKS));
 
     }
 
@@ -50,19 +51,21 @@ public class TestTeleOp extends BaseRobot {
 
         //new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
         //new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad1.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
+        new Trigger(gamepad1.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
 
         new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT)
-                .then (new WaitCommand(0.5))
+                .then (new WaitCommand(0.25))
                 .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM)));
 
         new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
-                .then (new WaitCommand(0.5))
-                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE)));
+                .then (new WaitCommand(0.25))
+                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING)));
+
         new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
         new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad1.dpad_right, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT));
-        new Trigger(gamepad1.dpad_left, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN));
+        new Trigger(gamepad1.dpad_right, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
+        new Trigger(gamepad1.right_trigger>0.5, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT));
+        new Trigger(gamepad1.left_trigger>0.5, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN));
 
 //
 //        // Dump cargo macro
@@ -77,10 +80,10 @@ public class TestTeleOp extends BaseRobot {
 
         new Trigger(gamepad1.a,
                 new RunCommand((() -> {
-                    arm.setState(ArmSubsystem.State.TOP);}), arm)
+                    arm.setState(ArmSubsystem.State.SHORT);}), arm)
                         // on the way up
                         .then (new WaitCommand(0.25))
-                        .then(new DriveCommand(drive, 0, -0.4, 0, 0.75, true))
+                        .then(new DriveCommand(drive, 0, -0.2, 0, 0.5, true))
                         .then (new WaitCommand(0.25))
                         .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TopOfShort))
                         .then (new WaitCommand(0.1))
@@ -88,7 +91,24 @@ public class TestTeleOp extends BaseRobot {
 
                         .then (new WaitCommand(0.1))
                         // on the way down
-                        .then(new DriveCommand(drive, 0, 0.4, 0, 0.75, true))
+                        .then(new DriveCommand(drive, 0, 0.2, 0, 0.5, true))
+                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
+        );
+
+        new Trigger(gamepad1.b,
+                new RunCommand((() -> {
+                    arm.setState(ArmSubsystem.State.MIDDLE);}), arm)
+                        // on the way up
+                        .then (new WaitCommand(0.5))
+                        .then(new DriveCommand(drive, 0, -0.2, 0, 0.5, true))
+                        .then (new WaitCommand(0.5))
+                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TopOfMiddle))
+                        .then (new WaitCommand(0.1))
+                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+
+                        .then (new WaitCommand(0.1))
+                        // on the way down
+                        .then(new DriveCommand(drive, 0, 0.2, 0, 0.5, true))
                         .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
         );
 

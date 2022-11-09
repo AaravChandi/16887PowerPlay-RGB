@@ -22,7 +22,10 @@ public class ArmSubsystem extends Subsystem {
         TOP,
         MIDDLE,
         BOTTOM,
+        SHORT,
         TopOfShort,
+        TopOfMiddle,
+        CARRYING
     }
 
     private State state;
@@ -31,6 +34,7 @@ public class ArmSubsystem extends Subsystem {
 
     public ArmSubsystem(HardwareMap hardwareMap) {
         slide = new SHPMotor(hardwareMap, Constants.Arm.kSlideName, MotorUnit.TICKS);
+        slide.reverseDirection();
         slide.enablePositionPID(Constants.Arm.kSlideP);
         slide.setPositionErrorTolerance(Constants.Arm.kSlideTolerance);
         slide.enableFF(new ElevatorFFController(0, Constants.Arm.kSlideG));
@@ -84,16 +88,26 @@ public class ArmSubsystem extends Subsystem {
                 slide.setPosition(Constants.Arm.kSlideTop);
                 telemetry.addData("state: ", "TOP");
                 break;
-            case MIDDLE:
+            case CARRYING:
                 slide.setPosition(Constants.Arm.kSlideCarry);
                 telemetry.addData("state: ", "Carrying");
+                break;
+            case MIDDLE:
+                slide.setPosition(Constants.Arm.kSlideMiddle);
+                telemetry.addData("state: ", "Middle");
+                break;
+            case TopOfMiddle:
+                slide.setPosition(Constants.Arm.kSlideMiddle-400);
                 break;
             case BOTTOM:
                 slide.setPosition(Constants.Arm.kSlideBottom);
                 telemetry.addData("state: ", "BOTTOM");
                 break;
+            case SHORT:
+                slide.setPosition(Constants.Arm.kSlideShort);
+                break;
             case TopOfShort:
-                slide.setPosition(Constants.Arm.kSlideTop-400);
+                slide.setPosition(Constants.Arm.kSlideShort-400);
                 break;
         }
     }
