@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 @Autonomous
 
-public class TestingAuto extends BaseRobot {
+public class RightPosAuto extends BaseRobot {
     int currentTag;
     RRMecanumDrive drive;
     Trajectory trajForward1, trajForward2, trajBack;
@@ -48,7 +48,6 @@ public class TestingAuto extends BaseRobot {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
-//TODO: Make a left and right auto. Left backs up 26, right backs up 30
         trajForward1 = drive.trajectoryBuilder(startPos)
                 .forward(60)
                 .build();
@@ -138,43 +137,3 @@ public class TestingAuto extends BaseRobot {
          */
 
 }
-
-
-
-
-
-//
-//        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(90));
-//        drive.setPoseEstimate(startPos);
-//
-//        telemetry.addData(">", "Press Play to start op mode");
-//        telemetry.update();
-//
-//        waitForStart();
-//
-//        if (isStopRequested()) return;
-//
-//        Trajectory traj1 = drive.trajectoryBuilder(startPos)
-//                .splineTo(new Vector2d(20, 20), Math.toRadians(90))
-//                .build();
-//        drive.followTrajectory(traj1);
-//
-//        // do something
-//
-//        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-//                .strafeLeft(10)
-//                .build();
-//        drive.followTrajectory(traj2);
-//
-//        // do something else
-//
-//        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-//                .back(10)
-//                .build();
-//        drive.followTrajectory(traj3);
-//
-//        // done
-//
-//        return;
-
-

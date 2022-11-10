@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 @Autonomous
 
-public class TestingAuto extends BaseRobot {
+public class LeftPosAuto extends BaseRobot {
     int currentTag;
     RRMecanumDrive drive;
     Trajectory trajForward1, trajForward2, trajBack;
@@ -48,7 +48,6 @@ public class TestingAuto extends BaseRobot {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
-//TODO: Make a left and right auto. Left backs up 26, right backs up 30
         trajForward1 = drive.trajectoryBuilder(startPos)
                 .forward(60)
                 .build();
@@ -56,7 +55,7 @@ public class TestingAuto extends BaseRobot {
                 .forward(30)
                 .build();
         trajBack = drive.trajectoryBuilder(startPos)
-                .back(30)
+                .back(26)
                 .build();
 
     }
@@ -90,8 +89,6 @@ public class TestingAuto extends BaseRobot {
         );
     }
 
-
-
     @Override
     public void loop() {
         super.loop();
@@ -101,80 +98,5 @@ public class TestingAuto extends BaseRobot {
 
         drive.update();
     }
-    /*
-    @Override
-    public void start() {
-        super.start();
-        return;
-
-        //driving :)
-        //TODO: Get real coordinates
-        //TODO: Get visualizer working
-        /*Pose2d startPos = new Pose2d(10, 10, Math.toRadians(90));
-        drive.setPoseEstimate(startPos);
-
-        Trajectory parkTraj1 = drive.trajectoryBuilder(startPos)
-                .splineTo(new Vector2d(0, 10), Math.toRadians(90))
-                .build();
-        Trajectory parkTraj2 = drive.trajectoryBuilder(startPos)
-                .splineTo(new Vector2d(10, 15), Math.toRadians(90))
-                .build();
-        Trajectory parkTraj3 = drive.trajectoryBuilder(startPos)
-                .splineTo(new Vector2d(20, 10), Math.toRadians(90))
-                .build();
-
-        drive.followTrajectory(parkTraj1);
-/*
-        if(Integer.valueOf(currentTag.get(0).toString()) == 7){
-            drive.followTrajectory(parkTraj1);
-        }
-        else if(Integer.valueOf(currentTag.get(0).toString()) == 8){
-            drive.followTrajectory(parkTraj2);
-        }
-        else if(Integer.valueOf(currentTag.get(0).toString()) == 12){
-            drive.followTrajectory(parkTraj3);
-        }
-
-         */
 
 }
-
-
-
-
-
-//
-//        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(90));
-//        drive.setPoseEstimate(startPos);
-//
-//        telemetry.addData(">", "Press Play to start op mode");
-//        telemetry.update();
-//
-//        waitForStart();
-//
-//        if (isStopRequested()) return;
-//
-//        Trajectory traj1 = drive.trajectoryBuilder(startPos)
-//                .splineTo(new Vector2d(20, 20), Math.toRadians(90))
-//                .build();
-//        drive.followTrajectory(traj1);
-//
-//        // do something
-//
-//        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-//                .strafeLeft(10)
-//                .build();
-//        drive.followTrajectory(traj2);
-//
-//        // do something else
-//
-//        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-//                .back(10)
-//                .build();
-//        drive.followTrajectory(traj3);
-//
-//        // done
-//
-//        return;
-
-
