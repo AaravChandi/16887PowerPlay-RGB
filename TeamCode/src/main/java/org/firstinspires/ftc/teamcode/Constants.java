@@ -28,12 +28,12 @@ public final class Constants {
         public static final double kSlideP = 12;
         public static final double kSlideTolerance = 0.05;
         public static final double kSlideMaxVelocity = 1;
-        public static final double kSlideG = 0.25; //THIS MIGHT BE AN ISSUE
+        public static final double kSlideG = 0.15; //THIS MIGHT BE AN ISSUE
 
-        public static final double kSlideTop = 3800;
-        public static final double kSlideMiddle = 3200;
-        public static final double kSlideShort = 1700;
-        public static final double kSlideCarry = 150;
+        public static final double kSlideTop = 4000;
+        public static final double kSlideMiddle = 2950;
+        public static final double kSlideShort = 1800;
+        public static final double kSlideCarry = 300;
         public static final double kSlideBottom = 11;
 
     }

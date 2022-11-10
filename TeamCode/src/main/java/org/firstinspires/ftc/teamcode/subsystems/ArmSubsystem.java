@@ -65,12 +65,14 @@ public class ArmSubsystem extends Subsystem {
 
     public void nextState() {
         if (this.state == State.MIDDLE) setState(State.TOP);
-        else if (this.state == State.BOTTOM) setState(State.MIDDLE);
+        else if (this.state == State.SHORT) setState(State.MIDDLE);
+        else if (this.state == State.BOTTOM) setState(State.SHORT);
     }
 
     public void previousState() {
         if (this.state == State.TOP) setState(State.MIDDLE);
-        else if (this.state == State.MIDDLE) setState(State.BOTTOM);
+        else if (this.state == State.MIDDLE) setState(State.SHORT);
+        else if (this.state == State.SHORT) setState(State.BOTTOM);
     }
 
     public boolean atBottom() {
@@ -97,7 +99,7 @@ public class ArmSubsystem extends Subsystem {
                 telemetry.addData("state: ", "Middle");
                 break;
             case TopOfMiddle:
-                slide.setPosition(Constants.Arm.kSlideMiddle-400);
+                slide.setPosition(Constants.Arm.kSlideMiddle-600);
                 break;
             case BOTTOM:
                 slide.setPosition(Constants.Arm.kSlideBottom);

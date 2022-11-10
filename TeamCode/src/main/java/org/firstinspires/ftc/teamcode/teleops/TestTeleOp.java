@@ -51,7 +51,11 @@ public class TestTeleOp extends BaseRobot {
 
         //new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
         //new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad1.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
+        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
+        new Trigger(gamepad1.dpad_right, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
+        new Trigger(gamepad1.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.SHORT));
+        new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
+        new Trigger(gamepad1.y, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
 
         new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT)
                 .then (new WaitCommand(0.25))
@@ -61,22 +65,11 @@ public class TestTeleOp extends BaseRobot {
                 .then (new WaitCommand(0.25))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING)));
 
-        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
-        new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad1.dpad_right, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
         new Trigger(gamepad1.right_trigger>0.5, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT));
         new Trigger(gamepad1.left_trigger>0.5, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN));
 
 //
 //        // Dump cargo macro
-        new Trigger(gamepad1.b,
-                new RunCommand((() -> {
-                    arm.setState(ArmSubsystem.State.TOP);}), arm)
-                //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
-                //.then(new DumpCargoCommand(scoop))
-                //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE))
-                //.then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-        );
 
         new Trigger(gamepad1.a,
                 new RunCommand((() -> {
@@ -99,9 +92,9 @@ public class TestTeleOp extends BaseRobot {
                 new RunCommand((() -> {
                     arm.setState(ArmSubsystem.State.MIDDLE);}), arm)
                         // on the way up
-                        .then (new WaitCommand(0.5))
+                        .then (new WaitCommand(1))
                         .then(new DriveCommand(drive, 0, -0.2, 0, 0.5, true))
-                        .then (new WaitCommand(0.5))
+                        .then (new WaitCommand(1))
                         .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TopOfMiddle))
                         .then (new WaitCommand(0.1))
                         .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
