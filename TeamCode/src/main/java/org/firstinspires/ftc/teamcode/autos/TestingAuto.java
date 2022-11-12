@@ -48,7 +48,7 @@ public class TestingAuto extends BaseRobot {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
-//TODO: Make a left and right auto. Left backs up 26, right backs up 30
+//TODO: Make a left and right auto. Left backs up 30, right backs up 26
         trajForward1 = drive.trajectoryBuilder(startPos)
                 .forward(60)
                 .build();
