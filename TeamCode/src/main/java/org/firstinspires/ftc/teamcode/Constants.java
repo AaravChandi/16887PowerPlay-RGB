@@ -25,15 +25,15 @@ public final class Constants {
     public static final class Arm {
         public static final String kSlideName = "slide";
 
-        public static final double kSlideP = 12;
+        public static final double kSlideP = 15;
         public static final double kSlideTolerance = 0.05;
         public static final double kSlideMaxVelocity = 1;
-        public static final double kSlideG = 0.15; //THIS MIGHT BE AN ISSUE
+        public static final double kSlideG = 0.2; //THIS MIGHT BE AN ISSUE
 
-        public static final double kSlideTop = 4000;
-        public static final double kSlideMiddle = 2950;
+        public static final double kSlideTop = 3925;
+        public static final double kSlideMiddle = 2900;
         public static final double kSlideShort = 1800;
-        public static final double kSlideCarry = 300;
+        public static final double kSlideCarry = 250;
         public static final double kSlideBottom = 11;
 
     }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import org.firstinspires.ftc.teamcode.shplib.commands.Command;
+import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
 import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 
@@ -12,12 +13,15 @@ public class MoveArmCommand extends Command {
 
     public enum Direction {
         TOP,
+        TopOfTop,
         MIDDLE,
         BOTTOM,
         SHORT,
         TopOfShort,
         TopOfMiddle,
-        CARRYING
+        CARRYING,
+        NEXT,
+        PREVIOUS,
     }
 
     public MoveArmCommand(ArmSubsystem arm, Direction direction) {
@@ -26,11 +30,15 @@ public class MoveArmCommand extends Command {
         this.arm = arm;
         this.direction = direction;
         if (direction == Direction.MIDDLE)
+            endTime = 1;
+        else if (direction == Direction.PREVIOUS)
             endTime = 0.5;
-        if (direction == Direction.TopOfShort)
-            endTime = 0.5;
+        else if (direction == Direction.TOP)
+            endTime = 3;
+        if (arm.slide.getPosition(MotorUnit.TICKS)<1000 && direction == Direction.BOTTOM)
+            endTime = 1;
         else
-            endTime = 2;
+            endTime = 1;
     }
 
     @Override
@@ -43,6 +51,9 @@ public class MoveArmCommand extends Command {
         else if (direction == Direction.TopOfMiddle) arm.setState(ArmSubsystem.State.TopOfMiddle);
         else if (direction == Direction.SHORT) arm.setState(ArmSubsystem.State.SHORT);
         else if (direction == Direction.CARRYING) arm.setState(ArmSubsystem.State.CARRYING);
+        else if (direction == Direction.NEXT) arm.nextState();
+        else if (direction == Direction.PREVIOUS) arm.previousState();
+        else if (direction == Direction.TopOfTop) arm.setState(ArmSubsystem.State.TopOfTop);
     }
 
     @Override

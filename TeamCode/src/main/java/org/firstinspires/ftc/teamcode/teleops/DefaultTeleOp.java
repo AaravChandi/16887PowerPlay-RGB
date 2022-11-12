@@ -14,13 +14,12 @@ import org.firstinspires.ftc.teamcode.shplib.commands.Trigger;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
 import org.firstinspires.ftc.teamcode.shplib.hardware.SHPMotor;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
-import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
 
 @TeleOp
-public class TestTeleOp extends BaseRobot {
-public double debounce;
+public class DefaultTeleOp extends BaseRobot {
+
     @Override
     public void init() {
         super.init();
@@ -40,7 +39,6 @@ public double debounce;
     @Override
     public void start() {
         super.start();
-        debounce = Clock.now();
 
 
         // Add anything that needs to be run a single time when the OpMode starts
@@ -54,30 +52,30 @@ public double debounce;
 
         //new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
         //new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
-        new Trigger(gamepad1.dpad_right, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
-        new Trigger(gamepad1.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.SHORT));
-        new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad1.y, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
+        new Trigger(gamepad1.dpad_up,
+                new RunCommand((() -> {
+                    arm.setState(ArmSubsystem.State.MIDDLE);}), arm));
+        new Trigger(gamepad1.dpad_down,
+                new RunCommand((() -> {
+                    arm.setState(ArmSubsystem.State.BOTTOM);}), arm));
+        new Trigger(gamepad1.y,
+                new RunCommand((() -> {
+                    arm.setState(ArmSubsystem.State.CARRYING);}), arm));
 
-        /*new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT)
-                .then (new WaitCommand(0.25))
-                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS)));*/
+
+        new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT)
+                .then (new WaitCommand(0.4))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM)));
 
         new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
-                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.NEXT)));
+                .then (new WaitCommand(0.4))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING)));
 
-        new Trigger(gamepad1.left_bumper, new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS)
-                .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
-        );
-//        new Trigger(gamepad1.left_trigger>0.5, new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS)
-//                .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
-//        );
 
 //
 //        // Dump cargo macro
 
-        /*new Trigger(gamepad1.a,
+        new Trigger(gamepad1.a,
                 new RunCommand((() -> {
                     arm.setState(ArmSubsystem.State.SHORT);}), arm)
                         // on the way up
@@ -92,27 +90,9 @@ public double debounce;
                         // on the way down
                         .then(new DriveCommand(drive, 0, 0.2, 0, 0.5, true))
                         .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-        );*/
-        /*
-        new Trigger(gamepad1.b,
-                new RunCommand((() -> {
-                    arm.setState(ArmSubsystem.State.MIDDLE);}), arm)
-                        // on the way up
-                        .then (new WaitCommand(1))
-                        .then(new DriveCommand(drive, 0, -0.2, 0, 0.5, true))
-                        .then (new WaitCommand(1))
-                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TopOfMiddle))
-                        .then (new WaitCommand(0.1))
-                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+        );
 
-                        .then (new WaitCommand(0.1))
-                        // on the way down
-                        .then(new DriveCommand(drive, 0, 0.2, 0, 0.5, true))
-                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-        );*/
-
-        new Trigger(gamepad1.a, new NewDropCommand(scoop));
-
+        new Trigger(gamepad1.b, new NewDropCommand(scoop));
 
 
         /*new Trigger(gamepad1.left_bumper,

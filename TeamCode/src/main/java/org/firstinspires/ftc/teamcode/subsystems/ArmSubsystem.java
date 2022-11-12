@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
@@ -20,6 +21,7 @@ public class ArmSubsystem extends Subsystem {
 
     public enum State {
         TOP,
+        TopOfTop,
         MIDDLE,
         BOTTOM,
         SHORT,
@@ -66,13 +68,15 @@ public class ArmSubsystem extends Subsystem {
     public void nextState() {
         if (this.state == State.MIDDLE) setState(State.TOP);
         else if (this.state == State.SHORT) setState(State.MIDDLE);
-        else if (this.state == State.BOTTOM) setState(State.SHORT);
+        else if (this.state == State.CARRYING) setState(State.SHORT);
+        else if (this.state == State.BOTTOM) setState(State.CARRYING);
     }
 
     public void previousState() {
-        if (this.state == State.TOP) setState(State.MIDDLE);
-        else if (this.state == State.MIDDLE) setState(State.SHORT);
-        else if (this.state == State.SHORT) setState(State.BOTTOM);
+        if (this.state == State.TOP) setState(State.TopOfTop);
+        else if (this.state == State.MIDDLE) setState(State.TopOfMiddle);
+        else if (this.state == State.SHORT) setState(State.TopOfShort);
+        else if (this.state == State.CARRYING) setState(State.BOTTOM);
     }
 
     public boolean atBottom() {
@@ -110,6 +114,9 @@ public class ArmSubsystem extends Subsystem {
                 break;
             case TopOfShort:
                 slide.setPosition(Constants.Arm.kSlideShort-400);
+                break;
+            case TopOfTop:
+                slide.setPosition(Constants.Arm.kSlideTop-500);
                 break;
         }
     }

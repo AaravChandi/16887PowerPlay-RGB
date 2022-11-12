@@ -26,6 +26,11 @@ public class ScoopSubsystem extends Subsystem {
     public void setState(State state) {
         this.state = state;
     }
+    public void changeState() {
+        if (this.state == State.OUT) this.state = State.IN;
+        else
+            this.state = State.OUT;
+    }
 
     @Override
     public void periodic(Telemetry telemetry) {
