@@ -34,7 +34,7 @@ public class DriveSubsystem extends Subsystem {
                 leftY,
                 leftX
         ).rotated(-imu.getYaw());
-        double speed = 0.5;
+        double speed = 0.6;
         drive.mecanum(speed*vector.getX(), speed*vector.getY(), 0.8*speed*rightX); // field oriented
     }
 

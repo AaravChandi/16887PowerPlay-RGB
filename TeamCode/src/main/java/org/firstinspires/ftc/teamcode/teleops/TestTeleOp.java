@@ -65,6 +65,7 @@ public double debounce;
                 .then(new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS)));*/
 
         new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
+                .then(new WaitCommand(0.15))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.NEXT)));
 
         new Trigger(gamepad1.left_bumper, new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS)

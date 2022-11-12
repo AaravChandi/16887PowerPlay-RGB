@@ -23,18 +23,19 @@ public final class Constants {
     }
 
     public static final class Arm {
+        public static final double OFFSET = 60;
         public static final String kSlideName = "slide";
 
         public static final double kSlideP = 15;
         public static final double kSlideTolerance = 0.05;
         public static final double kSlideMaxVelocity = 1;
         public static final double kSlideG = 0.2; //THIS MIGHT BE AN ISSUE
-
-        public static final double kSlideTop = 3925;
-        public static final double kSlideMiddle = 2900;
-        public static final double kSlideShort = 1800;
-        public static final double kSlideCarry = 250;
-        public static final double kSlideBottom = 11;
+                                                    //"Didn't turn out to be" - Aarav
+        public static final double kSlideTop = 3925 - OFFSET;
+        public static final double kSlideMiddle = 2900 - OFFSET;
+        public static final double kSlideShort = 1800 - OFFSET;
+        public static final double kSlideCarry = 250 - OFFSET;
+        public static final double kSlideBottom = 11 - OFFSET;
 
     }
 

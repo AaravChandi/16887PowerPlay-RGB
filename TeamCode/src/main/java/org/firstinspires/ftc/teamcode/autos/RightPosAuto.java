@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
+import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRTankDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
@@ -55,7 +56,7 @@ public class RightPosAuto extends BaseRobot {
                 .forward(30)
                 .build();
         trajBack = drive.trajectoryBuilder(startPos)
-                .back(26)
+                .back(30)
                 .build();
 
     }
@@ -87,6 +88,7 @@ public class RightPosAuto extends BaseRobot {
                                 })
                         )
         );
+
     }
 
 
