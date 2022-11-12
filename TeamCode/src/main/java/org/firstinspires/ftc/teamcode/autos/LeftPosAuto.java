@@ -55,7 +55,7 @@ public class LeftPosAuto extends BaseRobot {
                 .forward(30)
                 .build();
         trajBack = drive.trajectoryBuilder(startPos)
-                .back(26)
+                .back(30)
                 .build();
 
     }
