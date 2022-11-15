@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.commands.NewDropCommand;
+import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.Trigger;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
@@ -20,7 +22,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
 
 @TeleOp
 public class TestTeleOp extends BaseRobot {
-public double debounce;
+private double debounce;
     @Override
     public void init() {
         super.init();
@@ -41,6 +43,7 @@ public double debounce;
     public void start() {
         super.start();
         debounce = Clock.now();
+        arm.override = false;
 
 
         // Add anything that needs to be run a single time when the OpMode starts
@@ -52,28 +55,78 @@ public double debounce;
         // Allows CommandScheduler.run() to be called - DO NOT DELETE!
         super.loop();
 
-        //new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
-        //new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
-        new Trigger(gamepad1.dpad_right, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
-        new Trigger(gamepad1.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.SHORT));
-        new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad1.y, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
+        new Trigger(gamepad1.x,
+                new RunCommand(( () -> {drive.imu.initialize();})));
 
-        /*new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT)
-                .then (new WaitCommand(0.25))
-                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS)));*/
+        new Trigger(gamepad1.dpad_up, new RunCommand(( () -> {arm.override = false;}))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP)));
 
-        new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
-                .then(new WaitCommand(0.15))
+        new Trigger(gamepad1.dpad_down, new RunCommand(( () -> {arm.override = false;}))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM)));
+
+        //KEEP FOR NOW INCASE AARAV CODE DOES NOT WORK WHICH IT PROBABLY WILL NOT
+        /*new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
+                .then(new WaitCommand(0.2))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.NEXT)));
 
         new Trigger(gamepad1.left_bumper, new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS)
                 .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
-        );
-//        new Trigger(gamepad1.left_trigger>0.5, new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS)
-//                .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
-//        );
+        );*/
+
+        new Trigger(gamepad1.a, new RunCommand(() -> {
+            if (!Clock.hasElapsed(debounce, 0.3)) return;
+            if (scoop.isClawOpen()) {
+                if (arm.getState() == ArmSubsystem.State.BOTTOM) {
+                    scoop.setState(ScoopSubsystem.State.IN);
+                    CommandScheduler.getInstance().scheduleCommand(
+                            new WaitCommand(0.3)
+                            .then(new RunCommand(() -> {
+                                arm.setState(ArmSubsystem.State.CARRYING);
+                            })));
+                }
+                else
+                    scoop.setState(ScoopSubsystem.State.IN);
+
+            }
+            else {
+                arm.previousState();
+                CommandScheduler.getInstance().scheduleCommand(
+                        new WaitCommand(0.5)
+                                .then(new RunCommand(() -> {
+                                    scoop.setState(ScoopSubsystem.State.OUT);
+                                })));
+            }
+            debounce = Clock.now();
+        }));
+
+        new Trigger(gamepad1.left_bumper, new RunCommand(( () -> {arm.override = false;}))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.SHORT)));
+
+        new Trigger(gamepad1.right_bumper, new RunCommand(( () -> {arm.override = false;}))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE)));
+
+        new Trigger(gamepad1.y, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
+
+        if (gamepad1.dpad_right) {
+            arm.override = true;
+            arm.slide.setPower(0.25);
+        }
+        else if (gamepad1.dpad_left) {
+            arm.override = true;
+            arm.slide.setPower(-0.25);
+        }
+        else if (arm.override)
+            arm.slide.setPower(0);
+
+        new Trigger(gamepad1.b, new RunCommand(() -> {
+            if (!Clock.hasElapsed(debounce, 0.5)) return;
+            arm.setState(ArmSubsystem.State.StackedCones);
+            debounce = Clock.now();
+            if (Clock.hasElapsed(debounce, 0.5)) arm.incrementConeLevelDown();
+
+        }));
+        /*new Trigger(gamepad2.dpad_down, new RunCommand(( () -> {arm.incrementConeLevelDown(1);})));
+        new Trigger(gamepad2.dpad_up, new RunCommand(( () -> {arm.incrementConeLevelDown(-1);})));*/
 
 //
 //        // Dump cargo macro
@@ -112,7 +165,7 @@ public double debounce;
                         .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
         );*/
 
-        new Trigger(gamepad1.a, new NewDropCommand(scoop));
+        //new Trigger(gamepad1.a, new NewDropCommand(scoop));
 
 
 

@@ -76,6 +76,7 @@ public class RRMecanumDrive extends MecanumDrive {
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
+
     public RRMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
@@ -149,6 +150,11 @@ public class RRMecanumDrive extends MecanumDrive {
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+    }
+
+    public double getCurrentAngle()
+    {
+        return imu.getAngularOrientation().firstAngle;
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {

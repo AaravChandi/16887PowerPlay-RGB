@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRTankDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 
 public class RightPosAuto extends BaseRobot {
     int currentTag;
+    DriveSubsystem findOffset;
     RRMecanumDrive drive;
     Trajectory trajForward1, trajForward2, trajBack;
 
@@ -40,6 +42,7 @@ public class RightPosAuto extends BaseRobot {
         super.init();
 
         drive = new RRMecanumDrive(hardwareMap);
+        findOffset = new DriveSubsystem(hardwareMap);
         //To get the current tag
         //currentTag.get(0);
 
@@ -87,7 +90,10 @@ public class RightPosAuto extends BaseRobot {
                                     }
                                 })
                         )
-        );
+
+                        .then(new RunCommand(() ->{
+                                    findOffset.offset = drive.getCurrentAngle();
+                        })));
 
     }
 
@@ -99,6 +105,8 @@ public class RightPosAuto extends BaseRobot {
         for (AprilTagDetection tag : vision.getTags()) {
             telemetry.addData("Tag ID: ", tag.id);
         }
+
+        PoseStorage.offset = drive.getCurrentAngle();
 
         drive.update();
     }

@@ -11,6 +11,7 @@ public class MoveArmCommand extends Command {
     private double startTime;
     private double endTime;
 
+
     public enum Direction {
         TOP,
         TopOfTop,
