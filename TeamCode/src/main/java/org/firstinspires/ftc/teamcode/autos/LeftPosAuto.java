@@ -9,18 +9,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
-import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
 import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
-import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRTankDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
 import org.firstinspires.ftc.teamcode.shplib.hardware.drive.SHPMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
@@ -34,18 +30,33 @@ import java.util.ArrayList;
 
 public class LeftPosAuto extends BaseRobot {
     int currentTag;
-
+    RRMecanumDrive drive;
     Trajectory trajForward1, trajForward2, trajBack;
 
     @Override
     public void init() {
         //
         super.init();
-        scoop.setState(ScoopSubsystem.State.IN);
 
-
+        drive = new RRMecanumDrive(hardwareMap);
         //To get the current tag
         //currentTag.get(0);
+
+        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(90));
+        drive.setPoseEstimate(startPos);
+
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+
+        trajForward1 = drive.trajectoryBuilder(startPos)
+                .forward(60)
+                .build();
+        trajForward2 = drive.trajectoryBuilder(startPos)
+                .forward(30)
+                .build();
+        trajBack = drive.trajectoryBuilder(startPos)
+                .back(26)
+                .build();
 
     }
 
@@ -56,31 +67,26 @@ public class LeftPosAuto extends BaseRobot {
 
         myCommand.scheduleCommand(
                 new FindAprilTagCommand(vision)
-                        .then(new DriveCommand(drive,0.5, 0.0, 0, 1.75, false))
-                .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
-                .then (new WaitCommand(2))
-                .then(new DriveCommand(drive,0, -0.275, 0, 0.3, false))
-                .then (new WaitCommand(2))
-                .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TopOfTop))
-                .then (new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
-                .then (new WaitCommand(2))
-                .then(new DriveCommand(drive,0, 0.275, 0, 0.4, false))
-                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-                .then (new WaitCommand(2))
-                .then(new DriveCommand(drive,-0.5, 0.0, 0, 2.2, false))
-                .then(new RunCommand(() ->{
-                            if(vision.getTags().get(0).id == 7) {
-                                myCommand.scheduleCommand(new DriveCommand(drive,0, -0.5, 0, 2.75, false)
-                                        .then (new DriveCommand(drive,0, 0, 0, 2.2, false)));
-                            }
-                            else if(vision.getTags().get(0).id == 12) {
-                                myCommand.scheduleCommand(new DriveCommand(drive,0, 0.5, 0, 2.75, false)
-                                        .then (new DriveCommand(drive,0, 0, 0, 2.2, false)));
-                            }
-                        })
-                )
+                        .then(new RunCommand(() -> {
+                                    drive.followTrajectoryAsync(trajForward1);
+                                })
+                        ).then(new WaitCommand(trajForward1.duration()))
+                        .then(new RunCommand(() -> {
+                                    drive.followTrajectoryAsync(trajBack);
+                                })
+                        ).then(new WaitCommand(trajBack.duration()))
+                        .then(new RunCommand(() ->{
+                                    if(vision.getTags().get(0).id == 7) {
+                                        drive.turn(Math.toRadians(-105));
+                                        drive.followTrajectoryAsync(trajForward2);
+                                    }
+                                    else if(vision.getTags().get(0).id == 12) {
+                                        drive.turn(Math.toRadians(115));
+                                        drive.followTrajectoryAsync(trajForward2);
+                                    }
+                                })
+                        )
         );
-
     }
 
     @Override
@@ -90,9 +96,7 @@ public class LeftPosAuto extends BaseRobot {
             telemetry.addData("Tag ID: ", tag.id);
         }
 
-
-
-
+        drive.update();
     }
 
 }

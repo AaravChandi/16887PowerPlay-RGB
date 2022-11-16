@@ -31,12 +31,6 @@ public class ScoopSubsystem extends Subsystem {
         else
             this.state = State.OUT;
     }
-    public boolean isClawOpen(){
-        if (this.state == State.OUT)
-            return true;
-        else
-            return false;
-    }
 
     @Override
     public void periodic(Telemetry telemetry) {

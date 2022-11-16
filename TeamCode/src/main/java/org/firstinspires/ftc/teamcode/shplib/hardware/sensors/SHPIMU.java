@@ -25,14 +25,7 @@ public class SHPIMU {
         imu.initialize(parameters);
     }
 
-    public void initialize() {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        imu.initialize(parameters);
-    }
-
     public double getYaw() {
         return imu.getAngularOrientation().firstAngle;
     }
-
 }
