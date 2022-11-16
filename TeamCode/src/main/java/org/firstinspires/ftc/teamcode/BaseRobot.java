@@ -69,6 +69,7 @@ public class BaseRobot extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("Loop Time (ms): ", Clock.elapsed(previousTime) * 1000);
+        telemetry.addData("Number of Stacked Cones Left", arm.coneLevel);
         previousTime = Clock.now();
 
         // Handles all subsystem and command execution - DO NOT DELETE!
