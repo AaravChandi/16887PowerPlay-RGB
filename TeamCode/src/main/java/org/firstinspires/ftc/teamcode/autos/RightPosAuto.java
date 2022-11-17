@@ -27,7 +27,7 @@ public class RightPosAuto extends BaseRobot {
     int currentTag;
     DriveSubsystem findOffset;
     RRMecanumDrive drive;
-    Trajectory trajForward1, trajStrafeRight, trajStrafeLeft, trajStrafePoleApproach, trajStrafePoleRetreat;
+    Trajectory trajForward1, trajBack1, trajStrafeRight, trajStrafeLeft, trajShaftPoleApproach, trajStrafePoleRetreat;
 
     @Override
     public void init() {
@@ -48,14 +48,20 @@ public class RightPosAuto extends BaseRobot {
         trajForward1 = drive.trajectoryBuilder(startPos)
                 .forward(80)
                 .build();
+        trajBack1 = drive.trajectoryBuilder(startPos)
+                .back(40)
+                .build();
         trajStrafeRight = drive.trajectoryBuilder(startPos)
                 .strafeLeft(-30)
                 .build();
         trajStrafeLeft = drive.trajectoryBuilder(startPos)
                 .strafeLeft(-30)
                 .build();
-        trajStrafePoleApproach = drive.trajectoryBuilder(startPos)
+        trajShaftPoleApproach = drive.trajectoryBuilder(startPos)
                 .strafeLeft(-10)
+                .build();
+        trajStrafePoleRetreat = drive.trajectoryBuilder(startPos)
+                .strafeRight(-10)
                 .build();
 
     }
@@ -73,13 +79,14 @@ public class RightPosAuto extends BaseRobot {
                                     drive.followTrajectoryAsync(trajForward1);
                                 })
                         )
+                        
                         //cone
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
                         .then(new WaitCommand(trajForward1.duration()))
                         .then(new RunCommand(() -> {
-                                    drive.followTrajectoryAsync(trajStrafePoleApproach);
+                                    drive.followTrajectoryAsync(trajShaftPoleApproach);
                                 })
-                        ).then(new WaitCommand(trajStrafePoleApproach.duration()))
+                        ).then(new WaitCommand(trajShaftPoleApproach.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
                         .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
                         .then(new RunCommand(() -> {
@@ -87,18 +94,23 @@ public class RightPosAuto extends BaseRobot {
                                 })
                         ).then(new WaitCommand(trajStrafePoleRetreat.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
+
                         //park
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafePoleRetreat);
                                 })
                         ).then(new WaitCommand(trajStrafePoleRetreat.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
+                        .then(new RunCommand(() -> {
+                                    drive.followTrajectoryAsync(trajBack1);
+                                })
+                        ).then(new WaitCommand(trajBack1.duration()))
                         .then(new RunCommand(() ->{
                                     if(vision.getTags().get(0).id == 7) {
-
+                                        drive.followTrajectoryAsync(trajStrafeLeft);
                                     }
                                     else if(vision.getTags().get(0).id == 12) {
-
+                                        drive.followTrajectoryAsync(trajStrafeRight);
                                     }
                                 })
                         )
