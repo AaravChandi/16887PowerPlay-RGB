@@ -1,12 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.roadrunner.profile.MotionProfile;
-import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
-import com.acmerobotics.roadrunner.profile.MotionState;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
@@ -26,14 +21,14 @@ public class ArmSubsystem extends Subsystem {
 
     public enum State {
         TOP,
-        TopOfTop,
+        TOP_OF_TOP,
         MIDDLE,
         BOTTOM,
         SHORT,
-        TopOfShort,
-        TopOfMiddle,
+        TOP_OF_SHORT,
+        TOP_OF_MIDDLE,
         CARRYING,
-        StackedCones,
+        STACKED_CONES,
         MANUAL,
     }
 
@@ -42,11 +37,11 @@ public class ArmSubsystem extends Subsystem {
     private double previousTime;
 
     public ArmSubsystem(HardwareMap hardwareMap) {
-        slide = new SHPMotor(hardwareMap, Constants.Arm.kSlideName, MotorUnit.TICKS);
+        slide = new SHPMotor(hardwareMap, Constants.Arm.K_SLIDE_NAME, MotorUnit.TICKS);
         slide.reverseDirection();
-        slide.enablePositionPID(Constants.Arm.kSlideP);
-        slide.setPositionErrorTolerance(Constants.Arm.kSlideTolerance);
-        slide.enableFF(new ElevatorFFController(0, Constants.Arm.kSlideG));
+        slide.enablePositionPID(Constants.Arm.K_SLIDE_P);
+        slide.setPositionErrorTolerance(Constants.Arm.K_SLIDE_TOLERANCE);
+        slide.enableFF(new ElevatorFFController(0, Constants.Arm.K_SLIDE_G));
         coneLevel = 5;
 //        slide.enableVelocityPID(Constants.Arm.kSlideP);
         //slide.enableProfiling(Constants.Arm.kSlideMaxVelocity);
@@ -62,7 +57,7 @@ public class ArmSubsystem extends Subsystem {
     }
 
     public void setState(State state) {
-        if (state == State.StackedCones)
+        if (state == State.STACKED_CONES)
             incrementConeLevelDown();
         this.state = state;
         previousTime = Clock.now();
@@ -87,9 +82,9 @@ public class ArmSubsystem extends Subsystem {
     }
 
     public void previousState() {
-        if (this.state == State.TOP) setState(State.TopOfTop);
-        else if (this.state == State.MIDDLE) setState(State.TopOfMiddle);
-        else if (this.state == State.SHORT) setState(State.TopOfShort);
+        if (this.state == State.TOP) setState(State.TOP_OF_TOP);
+        else if (this.state == State.MIDDLE) setState(State.TOP_OF_MIDDLE);
+        else if (this.state == State.SHORT) setState(State.TOP_OF_SHORT);
         else if (this.state == State.CARRYING) setState(State.BOTTOM);
 
     }
@@ -106,35 +101,35 @@ public class ArmSubsystem extends Subsystem {
         if (!override) {
             switch (state) {
                 case TOP:
-                    slide.setPosition(Constants.Arm.kSlideTop);
+                    slide.setPosition(Constants.Arm.K_SLIDE_TOP);
                     telemetry.addData("state: ", "TOP");
                     break;
                 case CARRYING:
-                    slide.setPosition(Constants.Arm.kSlideCarry);
+                    slide.setPosition(Constants.Arm.K_SLIDE_CARRY);
                     telemetry.addData("state: ", "Carrying");
                     break;
                 case MIDDLE:
-                    slide.setPosition(Constants.Arm.kSlideMiddle);
+                    slide.setPosition(Constants.Arm.K_SLIDE_MIDDLE);
                     telemetry.addData("state: ", "Middle");
                     break;
-                case TopOfMiddle:
-                    slide.setPosition(Constants.Arm.kSlideMiddle - 600);
+                case TOP_OF_MIDDLE:
+                    slide.setPosition(Constants.Arm.K_SLIDE_MIDDLE - 600);
                     break;
                 case BOTTOM:
-                    slide.setPosition(Constants.Arm.kSlideBottom);
+                    slide.setPosition(Constants.Arm.K_SLIDE_BOTTOM);
                     telemetry.addData("state: ", "BOTTOM");
                     break;
                 case SHORT:
-                    slide.setPosition(Constants.Arm.kSlideShort);
+                    slide.setPosition(Constants.Arm.K_SLIDE_SHORT);
                     break;
-                case TopOfShort:
-                    slide.setPosition(Constants.Arm.kSlideShort - 400);
+                case TOP_OF_SHORT:
+                    slide.setPosition(Constants.Arm.K_SLIDE_SHORT - 400);
                     break;
-                case TopOfTop:
-                    slide.setPosition(Constants.Arm.kSlideTop - 500);
+                case TOP_OF_TOP:
+                    slide.setPosition(Constants.Arm.K_SLIDE_TOP - 500);
                     break;
-                case StackedCones:
-                    slide.setPosition(Constants.Arm.kSlideBottom + coneLevel*200);
+                case STACKED_CONES:
+                    slide.setPosition(Constants.Arm.K_SLIDE_BOTTOM + coneLevel*200);
                     break;
                 case MANUAL:
                     slide.setPosition(manualPos);

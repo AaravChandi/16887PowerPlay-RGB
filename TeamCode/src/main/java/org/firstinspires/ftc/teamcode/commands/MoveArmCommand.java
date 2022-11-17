@@ -14,12 +14,12 @@ public class MoveArmCommand extends Command {
 
     public enum Direction {
         TOP,
-        TopOfTop,
+        TOP_OF_TOP,
         MIDDLE,
         BOTTOM,
         SHORT,
-        TopOfShort,
-        TopOfMiddle,
+        TOP_OF_SHORT,
+        TOP_OF_MIDDLE,
         CARRYING,
         NEXT,
         PREVIOUS,
@@ -48,13 +48,13 @@ public class MoveArmCommand extends Command {
         if (direction == Direction.TOP) {arm.setState(ArmSubsystem.State.TOP);}
         else if (direction == Direction.MIDDLE) arm.setState(ArmSubsystem.State.MIDDLE);
         else if (direction == Direction.BOTTOM) arm.setState(ArmSubsystem.State.BOTTOM);
-        else if (direction == Direction.TopOfShort) arm.setState(ArmSubsystem.State.TopOfShort);
-        else if (direction == Direction.TopOfMiddle) arm.setState(ArmSubsystem.State.TopOfMiddle);
+        else if (direction == Direction.TOP_OF_SHORT) arm.setState(ArmSubsystem.State.TOP_OF_SHORT);
+        else if (direction == Direction.TOP_OF_MIDDLE) arm.setState(ArmSubsystem.State.TOP_OF_MIDDLE);
         else if (direction == Direction.SHORT) arm.setState(ArmSubsystem.State.SHORT);
         else if (direction == Direction.CARRYING) arm.setState(ArmSubsystem.State.CARRYING);
         else if (direction == Direction.NEXT) arm.nextState();
         else if (direction == Direction.PREVIOUS) arm.previousState();
-        else if (direction == Direction.TopOfTop) arm.setState(ArmSubsystem.State.TopOfTop);
+        else if (direction == Direction.TOP_OF_TOP) arm.setState(ArmSubsystem.State.TOP_OF_TOP);
     }
 
     @Override

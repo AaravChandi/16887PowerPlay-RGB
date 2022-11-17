@@ -7,12 +7,12 @@ public class VelocityPID extends PIDController {
     private double power = 0;
 
     public VelocityPID(double kP, double currentVelocity) {
-        super(kP * Constants.kVelocityPIDFactor);
+        super(kP * Constants.K_VELOCITY_PID_FACTOR);
         setCurrentVelocity(currentVelocity);
     }
 
     public VelocityPID(double kP, double kI, double kD, double currentVelocity) {
-        super(kP * Constants.kVelocityPIDFactor, kI * Constants.kVelocityPIDFactor, kD * Constants.kVelocityPIDFactor);
+        super(kP * Constants.K_VELOCITY_PID_FACTOR, kI * Constants.K_VELOCITY_PID_FACTOR, kD * Constants.K_VELOCITY_PID_FACTOR);
         setCurrentVelocity(currentVelocity);
     }
 

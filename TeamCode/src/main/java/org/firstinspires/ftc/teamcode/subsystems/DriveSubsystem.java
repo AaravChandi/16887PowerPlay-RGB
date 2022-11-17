@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.util.AxesSigns;
 import org.firstinspires.ftc.teamcode.shplib.commands.Subsystem;
-import org.firstinspires.ftc.teamcode.shplib.hardware.SHPMotor;
 import org.firstinspires.ftc.teamcode.shplib.hardware.drive.SHPMecanumDrive;
 import org.firstinspires.ftc.teamcode.shplib.hardware.sensors.SHPIMU;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
@@ -22,9 +21,9 @@ public class DriveSubsystem extends Subsystem {
 
     public DriveSubsystem(HardwareMap hardwareMap) {
 //        rr = new RRMecanumDrive(hardwareMap, Constants.Drive.kMotorNames);
-        drive = new SHPMecanumDrive(hardwareMap, Constants.Drive.kMotorNames);
+        drive = new SHPMecanumDrive(hardwareMap, Constants.Drive.K_MOTOR_NAMES);
         for (int i = 0; i<4; i++)
-            drive.motors[i].enablePositionPID(Constants.Drive.kDriveP);
+            drive.motors[i].enablePositionPID(Constants.Drive.K_DRIVE_P);
 
         // Change AxesOrder and AxesSigns according to your hub orientation
         // Omit Axes arguments for standard orientation

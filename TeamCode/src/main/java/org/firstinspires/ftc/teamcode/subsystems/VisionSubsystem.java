@@ -44,7 +44,7 @@ public class VisionSubsystem extends Subsystem {
     public VisionSubsystem(HardwareMap hardwareMap) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new AprilTagDetectionPipeline(Constants.Vision.kTagsizeMeters, fx, fy, cx, cy);
+        pipeline = new AprilTagDetectionPipeline(Constants.Vision.K_TAGSIZE_METERS, fx, fy, cx, cy);
         tags = new ArrayList<>();
 
         camera.setPipeline(pipeline);

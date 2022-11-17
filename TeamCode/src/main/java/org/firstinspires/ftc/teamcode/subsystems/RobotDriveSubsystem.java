@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -8,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.util.AxesSigns;
 import org.firstinspires.ftc.teamcode.shplib.commands.Subsystem;
-import org.firstinspires.ftc.teamcode.shplib.hardware.SHPMotor;
 import org.firstinspires.ftc.teamcode.shplib.hardware.drive.SHPMecanumDrive;
 import org.firstinspires.ftc.teamcode.shplib.hardware.sensors.SHPIMU;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
@@ -20,9 +18,9 @@ public class RobotDriveSubsystem extends Subsystem {
 
     public RobotDriveSubsystem(HardwareMap hardwareMap) {
 //        rr = new RRMecanumDrive(hardwareMap, Constants.Drive.kMotorNames);
-        drive = new SHPMecanumDrive(hardwareMap, Constants.Drive.kMotorNames);
+        drive = new SHPMecanumDrive(hardwareMap, Constants.Drive.K_MOTOR_NAMES);
         for (int i = 0; i<4; i++)
-            drive.motors[i].enablePositionPID(Constants.Drive.kDriveP);
+            drive.motors[i].enablePositionPID(Constants.Drive.K_DRIVE_P);
 
         // Change AxesOrder and AxesSigns according to your hub orientation
         // Omit Axes arguments for standard orientation

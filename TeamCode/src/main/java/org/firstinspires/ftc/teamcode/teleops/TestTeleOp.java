@@ -1,20 +1,14 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
-import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 //import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
-import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
-import org.firstinspires.ftc.teamcode.commands.NewDropCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.Trigger;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
-import org.firstinspires.ftc.teamcode.shplib.hardware.SHPMotor;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
 import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
@@ -120,7 +114,7 @@ private double debounce;
 
         new Trigger(gamepad1.b, new RunCommand(() -> {
             if (!Clock.hasElapsed(debounce, 0.5)) return;
-            arm.setState(ArmSubsystem.State.StackedCones);
+            arm.setState(ArmSubsystem.State.STACKED_CONES);
             debounce = Clock.now();
             if (Clock.hasElapsed(debounce, 0.5)) arm.incrementConeLevelDown();
 

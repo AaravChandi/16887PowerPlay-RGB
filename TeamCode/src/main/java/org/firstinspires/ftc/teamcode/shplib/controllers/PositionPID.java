@@ -6,12 +6,12 @@ public class PositionPID extends PIDController {
     private double currentPosition;
 
     public PositionPID(double kP, double currentPosition) {
-        super(kP * Constants.kPositionPIDFactor);
+        super(kP * Constants.K_POSITION_PID_FACTOR);
         setCurrentPosition(currentPosition);
     }
 
     public PositionPID(double kP, double kI, double kD, double currentPosition) {
-        super(kP * Constants.kPositionPIDFactor, kI * Constants.kPositionPIDFactor, kD * Constants.kPositionPIDFactor);
+        super(kP * Constants.K_POSITION_PID_FACTOR, kI * Constants.K_POSITION_PID_FACTOR, kD * Constants.K_POSITION_PID_FACTOR);
         setCurrentPosition(currentPosition);
     }
 

@@ -119,10 +119,10 @@ public class RRMecanumDrive extends MecanumDrive {
         // For example, if +Y in this diagram faces downwards, you would use AxisDirection.NEG_Y.
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[0]);
-        leftRear = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[1]);
-        rightFront = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[2]);
-        rightRear = hardwareMap.get(DcMotorEx.class, Constants.Drive.kMotorNames[3]);
+        leftFront = hardwareMap.get(DcMotorEx.class, Constants.Drive.K_MOTOR_NAMES[0]);
+        leftRear = hardwareMap.get(DcMotorEx.class, Constants.Drive.K_MOTOR_NAMES[1]);
+        rightFront = hardwareMap.get(DcMotorEx.class, Constants.Drive.K_MOTOR_NAMES[2]);
+        rightRear = hardwareMap.get(DcMotorEx.class, Constants.Drive.K_MOTOR_NAMES[3]);
 
         motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
 
@@ -295,8 +295,8 @@ public class RRMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(-v);
-        leftRear.setPower(-v1);
+        leftFront.setPower(-v1);
+        leftRear.setPower(-v); //config for the stupid strafing
         rightFront.setPower(-v2);
         rightRear.setPower(-v3);
 

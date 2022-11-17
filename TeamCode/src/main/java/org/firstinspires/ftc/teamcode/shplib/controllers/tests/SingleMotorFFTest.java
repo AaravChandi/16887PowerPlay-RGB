@@ -44,7 +44,7 @@ public class SingleMotorFFTest extends LinearOpMode {
 
         while (opModeIsActive() && motor.getPosition(MotorUnit.TICKS) < LIMIT_TICKS) {
             double seconds = timer.seconds();
-            double power = seconds * VOLTAGE_RAMP / Constants.kNominalVoltage;
+            double power = seconds * VOLTAGE_RAMP / Constants.K_NOMINAL_VOLTAGE;
 
             times.add(timer.seconds());
             positions.add((double) motor.getPosition(MotorUnit.TICKS));

@@ -126,7 +126,7 @@ public class SHPMotor {
     public void setPower(double power) {
         if (ff != null) power += ff.getStaticOutput(power);
         if (voltageSensor != null)
-            power *= (Constants.kNominalVoltage / voltageSensor.getVoltage());
+            power *= (Constants.K_NOMINAL_VOLTAGE / voltageSensor.getVoltage());
         power = Range.clip(power, -1.0, 1.0);
         if (getPower() != power) motor.setPower(power);
     }

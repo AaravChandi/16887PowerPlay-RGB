@@ -18,7 +18,7 @@ public class ScoopSubsystem extends Subsystem {
     private State state;
 
     public ScoopSubsystem(HardwareMap hardwareMap) {
-        claw = hardwareMap.get(Servo.class, Constants.Scoop.kClawName);
+        claw = hardwareMap.get(Servo.class, Constants.Scoop.K_CLAW_NAME);
         this.state = State.OUT;
         claw.scaleRange(0,1);
     }
@@ -43,11 +43,11 @@ public class ScoopSubsystem extends Subsystem {
         telemetry.addData("Position", claw.getPosition());
         switch (state) {
             case IN:
-                claw.setPosition(Constants.Scoop.kIn);
+                claw.setPosition(Constants.Scoop.K_IN);
                 telemetry.addData("In position", claw.getPosition());
                 break;
             case OUT:
-                claw.setPosition(Constants.Scoop.kOut);
+                claw.setPosition(Constants.Scoop.K_OUT);
                 telemetry.addData("Out position", claw.getPosition());
                 claw.getPosition();
                 break;

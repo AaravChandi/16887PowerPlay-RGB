@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.teleops;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 //import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
 import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
@@ -12,10 +11,8 @@ import org.firstinspires.ftc.teamcode.commands.NewDropCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.Trigger;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
-import org.firstinspires.ftc.teamcode.shplib.hardware.SHPMotor;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
 
 @TeleOp
 public class DefaultTeleOp extends BaseRobot {
@@ -82,7 +79,7 @@ public class DefaultTeleOp extends BaseRobot {
                         .then (new WaitCommand(0.25))
                         .then(new DriveCommand(drive, 0, -0.2, 0, 0.5, true))
                         .then (new WaitCommand(0.25))
-                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TopOfShort))
+                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_SHORT))
                         .then (new WaitCommand(0.1))
                         .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
 
