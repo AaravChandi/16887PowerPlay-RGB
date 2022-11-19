@@ -46,22 +46,22 @@ public class RightPosAuto extends BaseRobot {
         telemetry.update();
 
         trajForward1 = drive.trajectoryBuilder(startPos)
-                .forward(80)
+                .forward(100)
                 .build();
         trajBack1 = drive.trajectoryBuilder(startPos)
                 .back(40)
                 .build();
         trajStrafeRight = drive.trajectoryBuilder(startPos)
-                .strafeLeft(-30)
+                .strafeLeft(-100)
                 .build();
         trajStrafeLeft = drive.trajectoryBuilder(startPos)
-                .strafeLeft(-30)
+                .strafeLeft(-100)
                 .build();
         trajShaftPoleApproach = drive.trajectoryBuilder(startPos)
-                .strafeLeft(-10)
+                .strafeLeft(-40)
                 .build();
         trajStrafePoleRetreat = drive.trajectoryBuilder(startPos)
-                .strafeRight(-10)
+                .strafeRight(-40)
                 .build();
 
     }
@@ -74,12 +74,12 @@ public class RightPosAuto extends BaseRobot {
         myCommand.scheduleCommand(
                 new FindAprilTagCommand(vision)
                         //position
-                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.IN))
+                        //.then(new DumpCargoCommand(scoop, DumpCargoCommand.State.IN))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajForward1);
                                 })
                         )
-                        
+
                         //cone
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
                         .then(new WaitCommand(trajForward1.duration()))
@@ -88,7 +88,7 @@ public class RightPosAuto extends BaseRobot {
                                 })
                         ).then(new WaitCommand(trajShaftPoleApproach.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
-                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+                        //.then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafePoleRetreat);
                                 })

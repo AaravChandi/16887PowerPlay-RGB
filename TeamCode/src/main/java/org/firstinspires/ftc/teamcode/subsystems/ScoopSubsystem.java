@@ -21,6 +21,7 @@ public class ScoopSubsystem extends Subsystem {
         claw = hardwareMap.get(Servo.class, Constants.Scoop.K_CLAW_NAME);
         this.state = State.OUT;
         claw.scaleRange(0,1);
+
     }
 
     public void setState(State state) {
