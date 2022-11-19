@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
@@ -9,7 +8,7 @@ import org.firstinspires.ftc.teamcode.shplib.hardware.SHPMotor;
 import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
 /**
@@ -30,7 +29,7 @@ public class BaseRobot extends OpMode {
     public DriveSubsystem drive;
     public VisionSubsystem vision;
     public ArmSubsystem arm;
-    public ScoopSubsystem scoop;
+    public ClawSubsystem scoop;
 
     public SHPMotor intake;
 
@@ -52,7 +51,7 @@ public class BaseRobot extends OpMode {
         drive = new DriveSubsystem(hardwareMap);
         vision = new VisionSubsystem(hardwareMap);
         arm = new ArmSubsystem(hardwareMap);
-        scoop = new ScoopSubsystem(hardwareMap);
+        scoop = new ClawSubsystem(hardwareMap);
 //        intake = new SHPMotor(hardwareMap, "intake");
 //        scissorsystem = new ScissorSubsystem(hardwareMap);
 

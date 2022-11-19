@@ -17,7 +17,7 @@ public class ArmSubsystem extends Subsystem {
     public final SHPMotor slide;
     public boolean override;
     public int coneLevel;
-    private double manualPos;
+    private int manualPosition;
 
     public enum State {
         TOP,
@@ -47,7 +47,7 @@ public class ArmSubsystem extends Subsystem {
         //slide.enableProfiling(Constants.Arm.kSlideMaxVelocity);
 
 
-        manualPos = 0;
+        manualPosition = 0;
         previousTime = Clock.now();
         setState(State.BOTTOM);
     }
@@ -68,6 +68,17 @@ public class ArmSubsystem extends Subsystem {
         else if (this.state == State.SHORT) setState(State.MIDDLE);
         else if (this.state == State.CARRYING) setState(State.SHORT);
         else if (this.state == State.BOTTOM) setState(State.CARRYING);
+        else if (this.state == State.STACKED_CONES) setState(State.MIDDLE);
+    }
+
+    public void setManualPos(int encoderValue) {
+        manualPosition = encoderValue;
+        this.state = State.MANUAL;
+
+    }
+
+    public int getManualPosition() {
+        return manualPosition;
     }
 
     public State getState() {
@@ -83,6 +94,10 @@ public class ArmSubsystem extends Subsystem {
 
     public void previousState() {
         if (this.state == State.TOP) setState(State.TOP_OF_TOP);
+        else if (this.state == State.MANUAL && manualPosition >3200) setState(State.TOP_OF_TOP);
+        else if (this.state == State.MANUAL && manualPosition >2000) setState(State.TOP_OF_MIDDLE);
+        else if (this.state == State.MANUAL && manualPosition >1000) setState(State.TOP_OF_SHORT);
+        else if (this.state == State.MANUAL) setState(State.CARRYING);
         else if (this.state == State.MIDDLE) setState(State.TOP_OF_MIDDLE);
         else if (this.state == State.SHORT) setState(State.TOP_OF_SHORT);
         else if (this.state == State.CARRYING) setState(State.BOTTOM);
@@ -132,7 +147,7 @@ public class ArmSubsystem extends Subsystem {
                     slide.setPosition(Constants.Arm.K_SLIDE_BOTTOM + coneLevel*200);
                     break;
                 case MANUAL:
-                    slide.setPosition(manualPos);
+                    slide.setPosition(manualPosition);
                     break;
             }
         }

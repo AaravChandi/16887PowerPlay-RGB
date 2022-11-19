@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import org.firstinspires.ftc.teamcode.shplib.commands.Command;
-import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
-import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 
-public class DumpCargoCommand extends Command {
-    private final ScoopSubsystem scoop;
+public class InteractWithConeCommand extends Command {
+    private final ClawSubsystem scoop;
     private State state;
     private double startTime;
 
@@ -14,7 +13,7 @@ public class DumpCargoCommand extends Command {
         OUT
     }
 
-    public DumpCargoCommand(ScoopSubsystem scoop, State state) {
+    public InteractWithConeCommand(ClawSubsystem scoop, State state) {
         // Pass through any subsystems that are uninterruptible
         super(scoop);
         this.state = state;
@@ -24,8 +23,8 @@ public class DumpCargoCommand extends Command {
 
     @Override
     public void init() {
-        if (state == State.IN) scoop.setState(ScoopSubsystem.State.IN);
-        if (state == State.OUT) scoop.setState(ScoopSubsystem.State.OUT);
+        if (state == State.IN) scoop.setState(ClawSubsystem.State.IN);
+        if (state == State.OUT) scoop.setState(ClawSubsystem.State.OUT);
 
     }
 

@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.shplib.commands.Subsystem;
 
-public class ScoopSubsystem extends Subsystem {
+public class ClawSubsystem extends Subsystem {
     public final Servo claw;
 
     public enum State {
@@ -17,10 +17,11 @@ public class ScoopSubsystem extends Subsystem {
 
     private State state;
 
-    public ScoopSubsystem(HardwareMap hardwareMap) {
+    public ClawSubsystem(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, Constants.Scoop.K_CLAW_NAME);
         this.state = State.OUT;
         claw.scaleRange(0,1);
+        //claw.setDirection(Servo.Direction.REVERSE);
     }
 
     public void setState(State state) {

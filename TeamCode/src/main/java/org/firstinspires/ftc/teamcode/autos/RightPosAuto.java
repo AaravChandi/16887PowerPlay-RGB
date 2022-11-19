@@ -5,7 +5,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
-import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
+import org.firstinspires.ftc.teamcode.commands.InteractWithConeCommand;
 import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.PoseStorage;
@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
+import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.openftc.apriltag.AprilTagDetection;
 
@@ -46,16 +47,16 @@ public class RightPosAuto extends BaseRobot {
         telemetry.update();
 
         trajForward1 = drive.trajectoryBuilder(startPos)
-                .forward(80)
+                .forward(78)
                 .build();
         trajBack1 = drive.trajectoryBuilder(startPos)
                 .back(40)
                 .build();
         trajStrafeRight = drive.trajectoryBuilder(startPos)
-                .strafeLeft(-30)
+                .strafeLeft(-40)
                 .build();
         trajStrafeLeft = drive.trajectoryBuilder(startPos)
-                .strafeLeft(-30)
+                .strafeLeft(-40)
                 .build();
         trajShaftPoleApproach = drive.trajectoryBuilder(startPos)
                 .strafeLeft(-10)
@@ -63,6 +64,8 @@ public class RightPosAuto extends BaseRobot {
         trajStrafePoleRetreat = drive.trajectoryBuilder(startPos)
                 .strafeRight(-10)
                 .build();
+
+        scoop.setState(ClawSubsystem.State.IN);
 
     }
 
@@ -74,7 +77,6 @@ public class RightPosAuto extends BaseRobot {
         myCommand.scheduleCommand(
                 new FindAprilTagCommand(vision)
                         //position
-                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.IN))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajForward1);
                                 })
@@ -88,7 +90,7 @@ public class RightPosAuto extends BaseRobot {
                                 })
                         ).then(new WaitCommand(trajShaftPoleApproach.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
-                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+                        .then(new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafePoleRetreat);
                                 })

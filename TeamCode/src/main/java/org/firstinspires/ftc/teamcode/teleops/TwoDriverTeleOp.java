@@ -3,20 +3,21 @@ package org.firstinspires.ftc.teamcode.teleops;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
-import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 //import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
-import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
-import org.firstinspires.ftc.teamcode.commands.NewDropCommand;
+import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.Trigger;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
 import org.firstinspires.ftc.teamcode.shplib.hardware.units.MotorUnit;
+import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 
 @TeleOp
 public class TwoDriverTeleOp extends BaseRobot {
-
+    private double debounce;
+    private int desiredPosition;
     @Override
     public void init() {
         super.init();
@@ -36,6 +37,8 @@ public class TwoDriverTeleOp extends BaseRobot {
     @Override
     public void start() {
         super.start();
+        debounce = Clock.now();
+        arm.override = false;
 
 
         // Add anything that needs to be run a single time when the OpMode starts
@@ -47,62 +50,77 @@ public class TwoDriverTeleOp extends BaseRobot {
         // Allows CommandScheduler.run() to be called - DO NOT DELETE!
         super.loop();
 
-        //new Trigger(gamepad1.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.TOP));
-        //new Trigger(gamepad1.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad2.dpad_up, new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE));
-        new Trigger(gamepad2.dpad_right, new MoveArmCommand(arm, MoveArmCommand.Direction.NEXT));
-        new Trigger(gamepad2.dpad_left, new MoveArmCommand(arm, MoveArmCommand.Direction.PREVIOUS));
-        new Trigger(gamepad2.dpad_down, new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM));
-        new Trigger(gamepad2.y, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
+        new Trigger(gamepad2.x,
+                new RunCommand(( () -> {drive.imu.initialize();})));
+        new Trigger(gamepad2.dpad_up,
+                new RunCommand(( () -> {arm.incrementConeLevelUp();})));
+        new Trigger(gamepad2.dpad_down,
+                new RunCommand(( () -> {arm.incrementConeLevelDown();})));
 
-        new Trigger(gamepad1.left_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT)
-                .then (new WaitCommand(0.4))
+        new Trigger(gamepad1.dpad_up, new RunCommand(( () -> {arm.override = false;}))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP)));
+
+        new Trigger(gamepad1.dpad_down, new RunCommand(( () -> {arm.override = false;}))
                 .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM)));
 
-        new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
-                .then (new WaitCommand(0.4))
-                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING)));
 
+        new Trigger(gamepad1.a, new RunCommand(() -> {
+            if (!Clock.hasElapsed(debounce, 0.3)) return;
+            if (scoop.isClawOpen()) {
+                if (arm.getState() == ArmSubsystem.State.BOTTOM) {
+                    scoop.setState(ClawSubsystem.State.IN);
+                    CommandScheduler.getInstance().scheduleCommand(
+                            new WaitCommand(0.3)
+                                    .then(new RunCommand(() -> {
+                                        arm.setState(ArmSubsystem.State.CARRYING);
+                                    })));
+                }
+                else if (arm.getState() == ArmSubsystem.State.STACKED_CONES)
+                {
+                    scoop.setState(ClawSubsystem.State.IN);
+                    CommandScheduler.getInstance().scheduleCommand(
+                            new WaitCommand(0.3)
+                                    .then(new RunCommand(() -> {
+                                        arm.setState(ArmSubsystem.State.SHORT);
+                                    })));
+                }
+                else {
+                    scoop.setState(ClawSubsystem.State.IN);
+                    arm.nextState();
+                }
 
-//
-//        // Dump cargo macro
+            }
+            else {
+                scoop.setState(ClawSubsystem.State.OUT);
+            }
+            debounce = Clock.now();
+        }));
 
-        new Trigger(gamepad1.a,
-                new RunCommand((() -> {
-                    arm.setState(ArmSubsystem.State.SHORT);}), arm)
-                        // on the way up
-                        .then (new WaitCommand(0.25))
-                        .then(new DriveCommand(drive, 0, -0.2, 0, 0.5, true))
-                        .then (new WaitCommand(0.25))
-                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_SHORT))
-                        .then (new WaitCommand(0.1))
-                        .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+        new Trigger(gamepad1.dpad_left, new RunCommand(( () -> {arm.override = false;}))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.SHORT)));
 
-                        .then (new WaitCommand(0.1))
-                        // on the way down
-                        .then(new DriveCommand(drive, 0, 0.2, 0, 0.5, true))
-                        .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-        );
+        new Trigger(gamepad1.dpad_right, new RunCommand(( () -> {arm.override = false;}))
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE)));
 
-        new Trigger(gamepad2.b, new NewDropCommand(scoop));
+        new Trigger(gamepad1.y, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
 
+        new Trigger(gamepad1.right_bumper, new RunCommand(( () -> {
+            desiredPosition = (int)(arm.slide.getPosition(MotorUnit.TICKS)) - 200;
+            arm.setManualPos(desiredPosition);
+        })));
+        new Trigger(gamepad1.left_bumper, new RunCommand(( () -> {
+            desiredPosition = (int)(arm.slide.getPosition(MotorUnit.TICKS)) + 200;
+            arm.setManualPos(desiredPosition);
+        })));
 
-        /*new Trigger(gamepad1.left_bumper,
-                new RunCommand((() -> {drive.normalmecanum(1,1,1);}), drive)
-                        .then(new DriveCommand(drive,0.5,0,0,0.9))
-                        .then(new DriveCommand(drive,0,0,0,2))
-                        .then(new DriveCommand(drive,0,0.5,0,1))
-        );*/
+        new Trigger(gamepad1.b, new RunCommand(() -> {
+            if (!Clock.hasElapsed(debounce, 0.5)) return;
+            arm.setState(ArmSubsystem.State.STACKED_CONES);
+            debounce = Clock.now();
+            if (Clock.hasElapsed(debounce, 0.5)) arm.incrementConeLevelDown();
 
+        }));
 
-//
-//        intake.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
-//        if (gamepad1.a) {
-//            claw.setPower(0.5);
-//        } else if (gamepad1.b){
-//            claw.setPower(-0.5);
-//        } else claw.setPower(0.0);
-//    }
     }
 
 }

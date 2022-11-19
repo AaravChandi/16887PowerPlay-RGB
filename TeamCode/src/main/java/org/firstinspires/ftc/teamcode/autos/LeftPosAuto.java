@@ -5,13 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
-import org.firstinspires.ftc.teamcode.commands.DumpCargoCommand;
+import org.firstinspires.ftc.teamcode.commands.InteractWithConeCommand;
 import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
-import org.firstinspires.ftc.teamcode.subsystems.ScoopSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.openftc.apriltag.AprilTagDetection;
 
 /**
@@ -30,7 +30,7 @@ public class LeftPosAuto extends BaseRobot {
     public void init() {
         //
         super.init();
-        scoop.setState(ScoopSubsystem.State.IN);
+        scoop.setState(ClawSubsystem.State.IN);
 
 
         //To get the current tag
@@ -51,7 +51,7 @@ public class LeftPosAuto extends BaseRobot {
                 .then(new DriveCommand(drive,0, -0.275, 0, 0.3, false))
                 .then (new WaitCommand(2))
                 .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
-                .then (new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
+                .then (new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
                 .then (new WaitCommand(2))
                 .then(new DriveCommand(drive,0, 0.275, 0, 0.4, false))
                         .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))

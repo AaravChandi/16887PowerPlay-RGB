@@ -31,17 +31,17 @@ public final class Constants {
         public static final double K_SLIDE_MAX_VELOCITY = 1;
         public static final double K_SLIDE_G = 0.2; //THIS MIGHT BE AN ISSUE
                                                     //"Didn't turn out to be" - Aarav
-        public static final double K_SLIDE_TOP = 3950 - OFFSET;
+        public static final double K_SLIDE_TOP = 3825 - OFFSET;
         public static final double K_SLIDE_MIDDLE = 2900 - OFFSET;
         public static final double K_SLIDE_SHORT = 1800 - OFFSET;
         public static final double K_SLIDE_CARRY = 250 - OFFSET;
-        public static final double K_SLIDE_BOTTOM = 11 - OFFSET;
+        public static final double K_SLIDE_BOTTOM = 50 - OFFSET;
 
     }
 
     public static final class Scoop {
         public static final String K_CLAW_NAME = "claw";
-        public static final double K_OUT = 0.65;
+        public static final double K_OUT = 0.35;
         public static final double K_IN = 1;
     }
 }
