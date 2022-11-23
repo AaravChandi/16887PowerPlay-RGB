@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.shplib.commands;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 
 public class WaitCommand extends Command {
     private final double seconds;
-    private ElapsedTime timer;
+    private double startTime;
 
     public WaitCommand(double seconds) {
         this.seconds = seconds;
@@ -12,11 +12,11 @@ public class WaitCommand extends Command {
 
     @Override
     public void init() {
-        timer = new ElapsedTime();
+        startTime = Clock.now();
     }
 
     @Override
     public boolean isFinished() {
-        return timer.seconds() >= seconds;
+        return Clock.hasElapsed(startTime, seconds);
     }
 }

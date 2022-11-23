@@ -1,25 +1,22 @@
 package org.firstinspires.ftc.teamcode.autos;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
-import org.firstinspires.ftc.teamcode.commands.DriveCommand;
+import org.firstinspires.ftc.teamcode.commands.InteractWithConeCommand;
 import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
+import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.RRTankDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
-import org.firstinspires.ftc.teamcode.shplib.hardware.drive.SHPMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.openftc.apriltag.AprilTagDetection;
-
-import java.util.ArrayList;
 
 /**
  * To understand how Road Runner works and setting it up: https://learnroadrunner.com/
@@ -30,8 +27,10 @@ import java.util.ArrayList;
 
 public class TestingAuto extends BaseRobot {
     int currentTag;
+    DriveSubsystem findOffset;
     RRMecanumDrive drive;
-    Trajectory trajForward1, trajForward2, trajBack;
+    Trajectory trajForward1, trajBack1, trajStrafeRight, trajStrafeLeft, trajShaftPoleApproach, trajStrafePoleRetreat,
+            trajToStack, trajToBackToPole;
 
     @Override
     public void init() {
@@ -39,55 +38,121 @@ public class TestingAuto extends BaseRobot {
         super.init();
 
         drive = new RRMecanumDrive(hardwareMap);
+        findOffset = new DriveSubsystem(hardwareMap);
         //To get the current tag
         //currentTag.get(0);
 
-        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(90));
+        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(0));
         drive.setPoseEstimate(startPos);
 
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
-//TODO: Make a left and right auto. Left backs up 30, right backs up 26
         trajForward1 = drive.trajectoryBuilder(startPos)
-                .forward(60)
+                .forward(48)
                 .build();
-        trajForward2 = drive.trajectoryBuilder(startPos)
-                .forward(30)
+        trajToStack = drive.trajectoryBuilder(startPos)
+                .strafeRight(100)
                 .build();
-        trajBack = drive.trajectoryBuilder(startPos)
-                .back(30)
+        trajToBackToPole= drive.trajectoryBuilder(startPos)
+                .strafeLeft(100)
                 .build();
+        trajBack1 = drive.trajectoryBuilder(startPos)
+                .back(20)
+                .build();
+        trajStrafeRight = drive.trajectoryBuilder(startPos)
+                .strafeLeft(40)
+                .build();
+        trajStrafeLeft = drive.trajectoryBuilder(startPos)
+                .strafeLeft(-40)
+                .build();
+        trajShaftPoleApproach = drive.trajectoryBuilder(startPos)
+                .strafeLeft(-15)
+                .build();
+        trajStrafePoleRetreat = drive.trajectoryBuilder(startPos)
+                .strafeRight(-15)
+                .build();
+
+        scoop.setState(ClawSubsystem.State.IN);
 
     }
 
     public void start() {
         super.start();
 
-        CommandScheduler myCommand = CommandScheduler.getInstance();
+        CommandScheduler.getInstance().scheduleCommand(
+                new RunCommand(() -> {
+                    scoop.setState(ClawSubsystem.State.IN);
 
-        myCommand.scheduleCommand(
-                new FindAprilTagCommand(vision)
+                })
+                        .then(new WaitCommand(2))
+                        .then(new FindAprilTagCommand(vision))
+                        //position
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajForward1);
                                 })
-                        ).then(new WaitCommand(trajForward1.duration()))
+                        )
+
+                        //cone
+                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
+                        .then(new WaitCommand(trajForward1.duration()))
                         .then(new RunCommand(() -> {
-                                    drive.followTrajectoryAsync(trajBack);
+                                    drive.followTrajectoryAsync(trajShaftPoleApproach);
                                 })
-                        ).then(new WaitCommand(trajBack.duration()))
+                        ).then(new WaitCommand(trajShaftPoleApproach.duration()))
+                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
+                        .then(new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
+                        .then(new RunCommand(() -> {
+                                    drive.followTrajectoryAsync(trajStrafePoleRetreat);
+                                })
+                        ).then(new WaitCommand(trajStrafePoleRetreat.duration()))
+                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
+
+                        //park
+                        .then(new RunCommand(() -> {
+                                    drive.followTrajectoryAsync(trajStrafePoleRetreat);
+                                }))
+                        .then(new WaitCommand(trajStrafePoleRetreat.duration()))
+                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.SHORT))
+                        .then(new RunCommand(() -> {
+                                    drive.followTrajectoryAsync(trajBack1);
+                                }))
+                        // go to stack
+                        .then(new WaitCommand(trajBack1.duration()))
+                        .then(new RunCommand(() -> {
+                            drive.turnAsync(Math.toRadians(180));
+                        }))
+                        .then(new WaitCommand(2.75))
+                        .then(new RunCommand(() -> {
+                            drive.followTrajectoryAsync(trajToStack);
+                        }))
+                        .then(new WaitCommand(trajToStack.duration()))
+                        .then (new RunCommand(() -> {
+                            scoop.setState(ClawSubsystem.State.IN);
+                        }))
+                        .then (new RunCommand(() -> {
+                            arm.setState(ArmSubsystem.State.TOP);
+                        }))
+                        .then(new RunCommand(() -> {
+                            drive.turnAsync(Math.toRadians(180));
+                        }))
+                        .then(new RunCommand(() -> {
+                            drive.followTrajectoryAsync(trajToBackToPole);
+                        }))
+
+
+                        // parking
                         .then(new RunCommand(() ->{
                                     if(vision.getTags().get(0).id == 7) {
-                                        drive.turn(Math.toRadians(-105));
-                                        drive.followTrajectoryAsync(trajForward2);
+                                        drive.followTrajectoryAsync(trajStrafeLeft);
                                     }
                                     else if(vision.getTags().get(0).id == 12) {
-                                        drive.turn(Math.toRadians(115));
-                                        drive.followTrajectoryAsync(trajForward2);
+                                        drive.followTrajectoryAsync(trajStrafeRight);
                                     }
                                 })
-                        )
-        );
+                        ));
+
+
     }
 
 
@@ -98,6 +163,8 @@ public class TestingAuto extends BaseRobot {
         for (AprilTagDetection tag : vision.getTags()) {
             telemetry.addData("Tag ID: ", tag.id);
         }
+
+        PoseStorage.offset = drive.getCurrentAngle();
 
         drive.update();
     }
@@ -138,43 +205,3 @@ public class TestingAuto extends BaseRobot {
          */
 
 }
-
-
-
-
-
-//
-//        Pose2d startPos = new Pose2d(10, 10, Math.toRadians(90));
-//        drive.setPoseEstimate(startPos);
-//
-//        telemetry.addData(">", "Press Play to start op mode");
-//        telemetry.update();
-//
-//        waitForStart();
-//
-//        if (isStopRequested()) return;
-//
-//        Trajectory traj1 = drive.trajectoryBuilder(startPos)
-//                .splineTo(new Vector2d(20, 20), Math.toRadians(90))
-//                .build();
-//        drive.followTrajectory(traj1);
-//
-//        // do something
-//
-//        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-//                .strafeLeft(10)
-//                .build();
-//        drive.followTrajectory(traj2);
-//
-//        // do something else
-//
-//        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-//                .back(10)
-//                .build();
-//        drive.followTrajectory(traj3);
-//
-//        // done
-//
-//        return;
-
-

@@ -34,7 +34,8 @@ public final class CommandScheduler {
         for (Command c : commands) {
             if (c.getClass().equals(command.getClass())
                     && !c.getClass().equals(RunCommand.class)
-                    && !c.getClass().equals(ParallelCommandGroup.class))
+                    && !c.getClass().equals(ParallelCommandGroup.class)
+                    && !c.getClass().equals(SequentialCommandGroup.class))
                 return;
         }
         command.init();
