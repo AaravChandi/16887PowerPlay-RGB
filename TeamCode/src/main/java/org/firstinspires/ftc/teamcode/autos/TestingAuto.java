@@ -29,7 +29,7 @@ public class TestingAuto extends BaseRobot {
     int currentTag;
     DriveSubsystem findOffset;
     RRMecanumDrive drive;
-    Trajectory trajForward1, trajBack1, trajStrafeRight, trajStrafeLeft, trajShaftPoleApproach, trajStrafePoleRetreat,
+    Trajectory trajForward1, trajForward2, trajBack1, trajStrafeRight, trajStrafeLeft, trajShaftPoleApproach, trajStrafePoleRetreat,
             trajToStack, trajToBackToPole;
 
     @Override
@@ -37,6 +37,7 @@ public class TestingAuto extends BaseRobot {
         //
         super.init();
 
+        arm.resetEncoder();
         drive = new RRMecanumDrive(hardwareMap);
         findOffset = new DriveSubsystem(hardwareMap);
         //To get the current tag
@@ -49,13 +50,16 @@ public class TestingAuto extends BaseRobot {
         telemetry.update();
 
         trajForward1 = drive.trajectoryBuilder(startPos)
-                .forward(48)
+                .forward(54)
+                .build();
+        trajForward2 = drive.trajectoryBuilder(startPos)
+                .forward(15)
                 .build();
         trajToStack = drive.trajectoryBuilder(startPos)
-                .strafeRight(100)
+                .strafeRight(-30)
                 .build();
         trajToBackToPole= drive.trajectoryBuilder(startPos)
-                .strafeLeft(100)
+                .strafeLeft(-30)
                 .build();
         trajBack1 = drive.trajectoryBuilder(startPos)
                 .back(20)
@@ -115,12 +119,12 @@ public class TestingAuto extends BaseRobot {
                         .then(new WaitCommand(trajStrafePoleRetreat.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.SHORT))
                         .then(new RunCommand(() -> {
-                                    drive.followTrajectoryAsync(trajBack1);
+                                    drive.followTrajectoryAsync(trajForward2);
                                 }))
                         // go to stack
-                        .then(new WaitCommand(trajBack1.duration()))
+                        .then(new WaitCommand(trajForward2.duration()))
                         .then(new RunCommand(() -> {
-                            drive.turnAsync(Math.toRadians(180));
+                            drive.turn(Math.toRadians(180));
                         }))
                         .then(new WaitCommand(2.75))
                         .then(new RunCommand(() -> {
@@ -134,7 +138,7 @@ public class TestingAuto extends BaseRobot {
                             arm.setState(ArmSubsystem.State.TOP);
                         }))
                         .then(new RunCommand(() -> {
-                            drive.turnAsync(Math.toRadians(180));
+                            drive.turn(Math.toRadians(180));
                         }))
                         .then(new RunCommand(() -> {
                             drive.followTrajectoryAsync(trajToBackToPole);
