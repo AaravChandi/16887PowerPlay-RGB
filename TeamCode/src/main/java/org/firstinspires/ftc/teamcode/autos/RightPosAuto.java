@@ -115,11 +115,7 @@ public class RightPosAuto extends BaseRobot {
                                         drive.followTrajectoryAsync(trajStrafeRight);
                                     }
                                 })
-                        )
-
-                        .then(new RunCommand(() ->{
-                                    findOffset.offset = drive.getCurrentAngle();
-                        })));
+                        ));
 
     }
 

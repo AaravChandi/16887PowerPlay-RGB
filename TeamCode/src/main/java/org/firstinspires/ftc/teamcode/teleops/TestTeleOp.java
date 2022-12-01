@@ -49,7 +49,7 @@ private int desiredPosition;
 
         // Allows CommandScheduler.run() to be called - DO NOT DELETE!
         super.loop();
-
+        drive.setDriveBias(arm.getDriveBias());
         new Trigger(gamepad1.x,
                 new RunCommand(( () -> {drive.imu.initialize();})));
 

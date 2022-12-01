@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -17,11 +18,12 @@ public class DriveSubsystem extends Subsystem {
 //    private final RRMecanumDrive rr;
     private final SHPMecanumDrive drive;
     public final SHPIMU imu;
-    public double offset = 0;
+    private double bias = 1.0;
 
     public DriveSubsystem(HardwareMap hardwareMap) {
 //        rr = new RRMecanumDrive(hardwareMap, Constants.Drive.kMotorNames);
         drive = new SHPMecanumDrive(hardwareMap, Constants.Drive.K_MOTOR_NAMES);
+
         for (int i = 0; i<4; i++)
             drive.motors[i].enablePositionPID(Constants.Drive.K_DRIVE_P);
 
@@ -35,8 +37,12 @@ public class DriveSubsystem extends Subsystem {
                 leftY,
                 leftX
         ).rotated(-imu.getYaw()+PoseStorage.offset);
-        double speed = 0.6;
-        drive.mecanum(speed*vector.getX(), speed*vector.getY(), 0.8*speed*rightX); // field oriented
+
+
+        drive.mecanum(bias*vector.getX(), bias*vector.getY(), bias*0.8*rightX); // field oriented
+    }
+    public void setDriveBias(double driveBias) {
+        bias = Range.clip(driveBias, 0.4, 1.0);
     }
 
     public void normalmecanum(double leftY, double leftX, double rightX) {
@@ -45,7 +51,6 @@ public class DriveSubsystem extends Subsystem {
 
     @Override
     public void periodic(Telemetry telemetry) {
-        telemetry.addData("offset: ", offset);
         telemetry.addData("heading: ", Math.toDegrees(imu.getYaw()));
         telemetry.addData("leftFront: ", drive.motors[0].getPosition(MotorUnit.TICKS));
         telemetry.addData("leftRear: ", drive.motors[1].getPosition(MotorUnit.TICKS));

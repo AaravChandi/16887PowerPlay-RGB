@@ -62,7 +62,12 @@ public class ArmSubsystem extends Subsystem {
         this.state = state;
         previousTime = Clock.now();
     }
-
+    public double getDriveBias() {
+        if (slide.getPosition(MotorUnit.TICKS)>3500)
+            return Math.abs(slide.getPosition(MotorUnit.TICKS) / Constants.Arm.K_SLIDE_TOP - 1.0);
+        else
+            return 0.8;
+    }
     public void nextState() {
         if (this.state == State.MIDDLE) setState(State.TOP);
         else if (this.state == State.SHORT) setState(State.MIDDLE);
