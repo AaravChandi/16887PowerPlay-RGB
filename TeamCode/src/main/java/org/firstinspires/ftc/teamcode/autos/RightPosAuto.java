@@ -65,7 +65,7 @@ public class RightPosAuto extends BaseRobot {
                 .strafeRight(-10)
                 .build();
 
-        scoop.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.IN);
 
     }
 
@@ -90,7 +90,7 @@ public class RightPosAuto extends BaseRobot {
                                 })
                         ).then(new WaitCommand(trajShaftPoleApproach.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
-                        .then(new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
+                        .then(new InteractWithConeCommand(claw, InteractWithConeCommand.State.OUT))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafePoleRetreat);
                                 })

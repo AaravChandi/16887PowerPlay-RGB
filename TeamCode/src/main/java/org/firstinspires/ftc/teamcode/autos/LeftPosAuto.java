@@ -30,7 +30,7 @@ public class LeftPosAuto extends BaseRobot {
     public void init() {
         //
         super.init();
-        scoop.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.IN);
 
 
         //To get the current tag
@@ -51,7 +51,7 @@ public class LeftPosAuto extends BaseRobot {
                 .then(new DriveCommand(drive,0, -0.275, 0, 0.3, false))
                 .then (new WaitCommand(2))
                 .then (new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
-                .then (new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
+                .then (new InteractWithConeCommand(claw, InteractWithConeCommand.State.OUT))
                 .then (new WaitCommand(2))
                 .then(new DriveCommand(drive,0, 0.275, 0, 0.4, false))
                         .then (new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))

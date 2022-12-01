@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.commands.InteractWithConeCommand;
-import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
@@ -16,7 +15,6 @@ import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.openftc.apriltag.AprilTagDetection;
 
 /**
  * To understand how Road Runner works and setting it up: https://learnroadrunner.com/
@@ -76,7 +74,7 @@ public class BlindLeftSideAuto extends BaseRobot {
                 .strafeLeft(-20)
                 .build();
 
-        scoop.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.IN);
 
     }
 
@@ -85,7 +83,7 @@ public class BlindLeftSideAuto extends BaseRobot {
 //TODO: Do wait commands
         CommandScheduler.getInstance().scheduleCommand(
                 new RunCommand(() -> {
-                    scoop.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.IN);
 
                 })
                         .then(new WaitCommand(3))
@@ -110,7 +108,7 @@ public class BlindLeftSideAuto extends BaseRobot {
                         ).then(new WaitCommand(trajShaftPoleApproach.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
                         .then(new WaitCommand(1))
-                        .then(new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
+                        .then(new InteractWithConeCommand(claw, InteractWithConeCommand.State.OUT))
                         .then(new WaitCommand(1))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafePoleRetreat);
@@ -134,7 +132,7 @@ public class BlindLeftSideAuto extends BaseRobot {
                         }))
                         .then(new WaitCommand(trajToStack.duration()))
                         .then (new RunCommand(() -> {
-                            scoop.setState(ClawSubsystem.State.IN);
+                            claw.setState(ClawSubsystem.State.IN);
                         }))
                         .then (new RunCommand(() -> {
                             arm.setState(ArmSubsystem.State.TOP);
@@ -152,7 +150,7 @@ public class BlindLeftSideAuto extends BaseRobot {
                                 })
                         ).then(new WaitCommand(trajShaftPoleApproach.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
-                        .then(new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
+                        .then(new InteractWithConeCommand(claw, InteractWithConeCommand.State.OUT))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafePoleRetreat);
                                 })

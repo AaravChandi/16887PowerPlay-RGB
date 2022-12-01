@@ -77,7 +77,7 @@ public class TestingAuto extends BaseRobot {
                 .strafeRight(-15)
                 .build();
 
-        scoop.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.IN);
 
     }
 
@@ -86,7 +86,7 @@ public class TestingAuto extends BaseRobot {
 
         CommandScheduler.getInstance().scheduleCommand(
                 new RunCommand(() -> {
-                    scoop.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.IN);
 
                 })
                         .then(new WaitCommand(2))
@@ -105,7 +105,7 @@ public class TestingAuto extends BaseRobot {
                                 })
                         ).then(new WaitCommand(trajShaftPoleApproach.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
-                        .then(new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
+                        .then(new InteractWithConeCommand(claw, InteractWithConeCommand.State.OUT))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafePoleRetreat);
                                 })
@@ -132,7 +132,7 @@ public class TestingAuto extends BaseRobot {
                         }))
                         .then(new WaitCommand(trajToStack.duration()))
                         .then (new RunCommand(() -> {
-                            scoop.setState(ClawSubsystem.State.IN);
+                            claw.setState(ClawSubsystem.State.IN);
                         }))
                         .then (new RunCommand(() -> {
                             arm.setState(ArmSubsystem.State.TOP);

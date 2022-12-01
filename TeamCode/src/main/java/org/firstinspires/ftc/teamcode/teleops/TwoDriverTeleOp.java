@@ -66,9 +66,9 @@ public class TwoDriverTeleOp extends BaseRobot {
 
         new Trigger(gamepad1.a, new RunCommand(() -> {
             if (!Clock.hasElapsed(debounce, 0.3)) return;
-            if (scoop.isClawOpen()) {
+            if (claw.isClawOpen()) {
                 if (arm.getState() == ArmSubsystem.State.BOTTOM) {
-                    scoop.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.IN);
                     CommandScheduler.getInstance().scheduleCommand(
                             new WaitCommand(0.3)
                                     .then(new RunCommand(() -> {
@@ -77,7 +77,7 @@ public class TwoDriverTeleOp extends BaseRobot {
                 }
                 else if (arm.getState() == ArmSubsystem.State.STACKED_CONES)
                 {
-                    scoop.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.IN);
                     CommandScheduler.getInstance().scheduleCommand(
                             new WaitCommand(0.3)
                                     .then(new RunCommand(() -> {
@@ -85,13 +85,13 @@ public class TwoDriverTeleOp extends BaseRobot {
                                     })));
                 }
                 else {
-                    scoop.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.IN);
                     arm.nextState();
                 }
 
             }
             else {
-                scoop.setState(ClawSubsystem.State.OUT);
+                claw.setState(ClawSubsystem.State.OUT);
             }
             debounce = Clock.now();
         }));

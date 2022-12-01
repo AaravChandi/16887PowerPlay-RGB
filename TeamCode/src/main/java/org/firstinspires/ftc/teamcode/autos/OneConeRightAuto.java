@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.shplib.commands.CommandScheduler;
 import org.firstinspires.ftc.teamcode.shplib.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.shplib.commands.WaitCommand;
-import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.openftc.apriltag.AprilTagDetection;
@@ -85,7 +84,7 @@ public class OneConeRightAuto extends BaseRobot {
         trajPark3 = drive.trajectoryBuilder(startPos)
                 .strafeRight(-55)
                 .build();
-        scoop.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.IN);
 
     }
 
@@ -96,10 +95,10 @@ public class OneConeRightAuto extends BaseRobot {
         CommandScheduler.getInstance().scheduleCommand(
                 new FindAprilTagCommand(vision)
                         .then(new RunCommand(() -> {
-                            scoop.setState(ClawSubsystem.State.IN);
+                            claw.setState(ClawSubsystem.State.IN);
                         }))
                         .then(new RunCommand(() -> {
-                            scoop.setState(ClawSubsystem.State.IN);
+                            claw.setState(ClawSubsystem.State.IN);
                         }))
                         .then(new WaitCommand(3))
                         //position
@@ -123,7 +122,7 @@ public class OneConeRightAuto extends BaseRobot {
                         ).then(new WaitCommand(trajShaftPoleApproach.duration()))
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
                         .then(new WaitCommand(1))
-                        .then(new InteractWithConeCommand(scoop, InteractWithConeCommand.State.OUT))
+                        .then(new InteractWithConeCommand(claw, InteractWithConeCommand.State.OUT))
                         .then(new WaitCommand(1))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafePoleRetreat);
