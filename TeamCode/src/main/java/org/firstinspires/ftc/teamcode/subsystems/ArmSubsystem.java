@@ -43,8 +43,10 @@ public class ArmSubsystem extends Subsystem {
         slide.setPositionErrorTolerance(Constants.Arm.K_SLIDE_TOLERANCE);
         slide.enableFF(new ElevatorFFController(0, Constants.Arm.K_SLIDE_G));
         coneLevel = 5;
-//        slide.enableVelocityPID(Constants.Arm.kSlideP);
-        //slide.enableProfiling(Constants.Arm.kSlideMaxVelocity);
+        /*
+         slide.enableVelocityPID(Constants.Arm.kSlideP);
+         slide.enableProfiling(Constants.Arm.kSlideMaxVelocity);
+        */
 
 
         manualPosition = 0;
