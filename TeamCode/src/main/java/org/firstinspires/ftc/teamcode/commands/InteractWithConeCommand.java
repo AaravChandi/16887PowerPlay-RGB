@@ -23,8 +23,8 @@ public class InteractWithConeCommand extends Command {
 
     @Override
     public void init() {
-        if (state == State.IN) scoop.setState(ClawSubsystem.State.IN);
-        if (state == State.OUT) scoop.setState(ClawSubsystem.State.OUT);
+        if (state == State.IN) scoop.setState(ClawSubsystem.State.CLOSED);
+        if (state == State.OUT) scoop.setState(ClawSubsystem.State.OPEN);
 
     }
 

@@ -50,7 +50,7 @@ private int desiredPosition;
         // Allows CommandScheduler.run() to be called - DO NOT DELETE!
         super.loop();
         drive.setDriveBias(arm.getDriveBias());
-        new Trigger(gamepad1.x,
+        new Trigger(gamepad1.y,
                 new RunCommand(( () -> {drive.imu.initialize();})));
 
         new Trigger(gamepad1.dpad_up, new RunCommand(( () -> {arm.override = false;}))
@@ -68,11 +68,11 @@ private int desiredPosition;
                 .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
         );*/
 
-        new Trigger(gamepad1.a, new RunCommand(() -> {
+        new Trigger(gamepad1.b, new RunCommand(() -> {
             if (!Clock.hasElapsed(debounce, 0.3)) return;
             if (claw.isClawOpen()) {
                 if (arm.getState() == ArmSubsystem.State.BOTTOM) {
-                    claw.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.CLOSED);
                     CommandScheduler.getInstance().scheduleCommand(
                             new WaitCommand(0.3)
                             .then(new RunCommand(() -> {
@@ -81,7 +81,7 @@ private int desiredPosition;
                 }
                 else if (arm.getState() == ArmSubsystem.State.STACKED_CONES)
                 {
-                    claw.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.CLOSED);
                     CommandScheduler.getInstance().scheduleCommand(
                             new WaitCommand(0.3)
                                     .then(new RunCommand(() -> {
@@ -89,15 +89,38 @@ private int desiredPosition;
                                     })));
                 }
                 else {
-                    claw.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.CLOSED);
                     arm.nextState();
                 }
 
             }
             else {
-                                    claw.setState(ClawSubsystem.State.OUT);
+                claw.setState(ClawSubsystem.State.OPEN);
             }
             debounce = Clock.now();
+        }));
+
+
+
+        new Trigger(gamepad1.a, new RunCommand(() -> {
+            if (!Clock.hasElapsed(debounce, 0.5)) return;
+            if (claw.isClawOpen() && arm.getState() == ArmSubsystem.State.BOTTOM) {
+                    claw.setState(ClawSubsystem.State.CLOSED);
+                    CommandScheduler.getInstance().scheduleCommand(
+                            new WaitCommand(0.15)
+                            .then(new RunCommand(() -> {
+                                arm.setState(ArmSubsystem.State.TOP);
+                            })));
+            }
+            else if (!claw.isClawOpen() && arm.getState() == ArmSubsystem.State.TOP) {
+                claw.setState(ClawSubsystem.State.OPEN);
+            }
+            else if (claw.isClawOpen() && arm.getState() == ArmSubsystem.State.TOP){
+                arm.setState(ArmSubsystem.State.BOTTOM);
+            }
+
+
+
         }));
 
         new Trigger(gamepad1.dpad_left, new RunCommand(( () -> {arm.override = false;}))
@@ -105,8 +128,6 @@ private int desiredPosition;
 
         new Trigger(gamepad1.dpad_right, new RunCommand(( () -> {arm.override = false;}))
                 .then(new MoveArmCommand(arm, MoveArmCommand.Direction.MIDDLE)));
-
-        new Trigger(gamepad1.y, new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING));
 
         new Trigger(gamepad1.right_bumper, new RunCommand(( () -> {
             desiredPosition = (int)(arm.slide.getPosition(MotorUnit.TICKS)) - 200;
@@ -117,7 +138,7 @@ private int desiredPosition;
             arm.setManualPos(desiredPosition);
         })));
 
-        new Trigger(gamepad1.b, new RunCommand(() -> {
+        new Trigger(gamepad1.x, new RunCommand(() -> {
             if (!Clock.hasElapsed(debounce, 0.5)) return;
             arm.setState(ArmSubsystem.State.STACKED_CONES);
             debounce = Clock.now();

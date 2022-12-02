@@ -30,7 +30,7 @@ public class LeftPosAuto extends BaseRobot {
     public void init() {
         //
         super.init();
-        claw.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.CLOSED);
 
 
         //To get the current tag

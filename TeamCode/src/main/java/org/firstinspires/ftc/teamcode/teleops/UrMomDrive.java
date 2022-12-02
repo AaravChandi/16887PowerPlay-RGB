@@ -34,9 +34,9 @@ public class UrMomDrive extends BaseRobot {
                 new RunCommand(( () -> {arm.previousState();})));
 
         new Trigger(gamepad1.a,
-                new RunCommand(( () -> {claw.setState(ClawSubsystem.State.IN);})));
+                new RunCommand(( () -> {claw.setState(ClawSubsystem.State.CLOSED);})));
 
         new Trigger(gamepad1.b,
-                new RunCommand(( () -> {claw.setState(ClawSubsystem.State.OUT);})));
+                new RunCommand(( () -> {claw.setState(ClawSubsystem.State.OPEN);})));
     }
 }

@@ -68,7 +68,7 @@ public class TwoDriverTeleOp extends BaseRobot {
             if (!Clock.hasElapsed(debounce, 0.3)) return;
             if (claw.isClawOpen()) {
                 if (arm.getState() == ArmSubsystem.State.BOTTOM) {
-                    claw.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.CLOSED);
                     CommandScheduler.getInstance().scheduleCommand(
                             new WaitCommand(0.3)
                                     .then(new RunCommand(() -> {
@@ -77,7 +77,7 @@ public class TwoDriverTeleOp extends BaseRobot {
                 }
                 else if (arm.getState() == ArmSubsystem.State.STACKED_CONES)
                 {
-                    claw.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.CLOSED);
                     CommandScheduler.getInstance().scheduleCommand(
                             new WaitCommand(0.3)
                                     .then(new RunCommand(() -> {
@@ -85,13 +85,13 @@ public class TwoDriverTeleOp extends BaseRobot {
                                     })));
                 }
                 else {
-                    claw.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.CLOSED);
                     arm.nextState();
                 }
 
             }
             else {
-                claw.setState(ClawSubsystem.State.OUT);
+                claw.setState(ClawSubsystem.State.OPEN);
             }
             debounce = Clock.now();
         }));

@@ -65,7 +65,7 @@ public class RightPosAuto extends BaseRobot {
                 .strafeRight(-10)
                 .build();
 
-        claw.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.CLOSED);
 
     }
 

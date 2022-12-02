@@ -11,15 +11,15 @@ public class ClawSubsystem extends Subsystem {
     public final Servo claw;
 
     public enum State {
-        IN,
-        OUT
+        CLOSED,
+        OPEN
     }
 
     private State state;
 
     public ClawSubsystem(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, Constants.Scoop.K_CLAW_NAME);
-        this.state = State.OUT;
+        this.state = State.OPEN;
         claw.scaleRange(0,1);
         //claw.setDirection(Servo.Direction.REVERSE);
     }
@@ -28,12 +28,12 @@ public class ClawSubsystem extends Subsystem {
         this.state = state;
     }
     public void changeState() {
-        if (this.state == State.OUT) this.state = State.IN;
+        if (this.state == State.OPEN) this.state = State.CLOSED;
         else
-            this.state = State.OUT;
+            this.state = State.OPEN;
     }
     public boolean isClawOpen(){
-        if (this.state == State.OUT)
+        if (this.state == State.OPEN)
             return true;
         else
             return false;
@@ -43,11 +43,11 @@ public class ClawSubsystem extends Subsystem {
     public void periodic(Telemetry telemetry) {
         telemetry.addData("Position", claw.getPosition());
         switch (state) {
-            case IN:
+            case CLOSED:
                 claw.setPosition(Constants.Scoop.K_IN);
                 telemetry.addData("In position", claw.getPosition());
                 break;
-            case OUT:
+            case OPEN:
                 claw.setPosition(Constants.Scoop.K_OUT);
                 telemetry.addData("Out position", claw.getPosition());
                 claw.getPosition();

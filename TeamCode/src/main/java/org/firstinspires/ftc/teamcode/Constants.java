@@ -31,11 +31,11 @@ public final class Constants {
         public static final double K_SLIDE_MAX_VELOCITY = 1;
         public static final double K_SLIDE_G = 0.2; //THIS MIGHT BE AN ISSUE
                                                     //"Didn't turn out to be" - Aarav
-        public static final double K_SLIDE_TOP = 3825 - OFFSET;
+        public static final double K_SLIDE_TOP = 3860 - OFFSET;
         public static final double K_SLIDE_MIDDLE = 2900 - OFFSET;
         public static final double K_SLIDE_SHORT = 1800 - OFFSET;
         public static final double K_SLIDE_CARRY = 250 - OFFSET;
-        public static final double K_SLIDE_BOTTOM = 50 - OFFSET;
+        public static final double K_SLIDE_BOTTOM = 10 - OFFSET;
 
     }
 

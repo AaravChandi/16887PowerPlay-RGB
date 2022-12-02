@@ -74,7 +74,7 @@ public class BlindLeftSideAuto extends BaseRobot {
                 .strafeLeft(-20)
                 .build();
 
-        claw.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.CLOSED);
 
     }
 
@@ -83,7 +83,7 @@ public class BlindLeftSideAuto extends BaseRobot {
 //TODO: Do wait commands
         CommandScheduler.getInstance().scheduleCommand(
                 new RunCommand(() -> {
-                    claw.setState(ClawSubsystem.State.IN);
+                    claw.setState(ClawSubsystem.State.CLOSED);
 
                 })
                         .then(new WaitCommand(3))
@@ -132,7 +132,7 @@ public class BlindLeftSideAuto extends BaseRobot {
                         }))
                         .then(new WaitCommand(trajToStack.duration()))
                         .then (new RunCommand(() -> {
-                            claw.setState(ClawSubsystem.State.IN);
+                            claw.setState(ClawSubsystem.State.CLOSED);
                         }))
                         .then (new RunCommand(() -> {
                             arm.setState(ArmSubsystem.State.TOP);

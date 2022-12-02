@@ -84,7 +84,7 @@ public class OneConeRightAuto extends BaseRobot {
         trajPark3 = drive.trajectoryBuilder(startPos)
                 .strafeRight(-55)
                 .build();
-        claw.setState(ClawSubsystem.State.IN);
+        claw.setState(ClawSubsystem.State.CLOSED);
 
     }
 
@@ -95,10 +95,10 @@ public class OneConeRightAuto extends BaseRobot {
         CommandScheduler.getInstance().scheduleCommand(
                 new FindAprilTagCommand(vision)
                         .then(new RunCommand(() -> {
-                            claw.setState(ClawSubsystem.State.IN);
+                            claw.setState(ClawSubsystem.State.CLOSED);
                         }))
                         .then(new RunCommand(() -> {
-                            claw.setState(ClawSubsystem.State.IN);
+                            claw.setState(ClawSubsystem.State.CLOSED);
                         }))
                         .then(new WaitCommand(3))
                         //position
