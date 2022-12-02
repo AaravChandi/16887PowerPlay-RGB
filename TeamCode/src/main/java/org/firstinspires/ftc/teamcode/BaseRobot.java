@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.shplib.utility.Clock;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SussyArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
 /**
@@ -28,6 +29,7 @@ public class BaseRobot extends OpMode {
     public DriveSubsystem drive;
     public VisionSubsystem vision;
     public ArmSubsystem arm;
+    public SussyArmSubsystem susArm;
     public ClawSubsystem claw;
 
     public SHPMotor intake;
