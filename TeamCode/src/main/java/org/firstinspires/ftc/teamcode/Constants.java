@@ -19,7 +19,7 @@ public final class Constants {
     }
 
     public static final class Vision {
-        public static final double K_TAGSIZE_METERS = 0.0475;
+        public static final double K_TAGSIZE_METERS = 0.039;
     }
 
     public static final class Arm {

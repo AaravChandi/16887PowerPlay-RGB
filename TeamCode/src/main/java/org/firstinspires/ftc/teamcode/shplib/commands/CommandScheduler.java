@@ -31,11 +31,20 @@ public final class CommandScheduler {
     }
 
     public void scheduleCommand(Command command) {
+        // if scheduled command is a sequential command group, toss it away and begin the chain
+        if (command instanceof SequentialCommandGroup) {
+            ArrayList<Command> nextCommands = command.getNextCommands();
+            Command nextCommand = nextCommands.remove(0);
+            nextCommand.then(nextCommands);
+            scheduleCommand(nextCommand);
+            return;
+        }
+        // make sure that duplicate commands aren't scheduled
         for (Command c : commands) {
             if (c.getClass().equals(command.getClass())
-                    && !c.getClass().equals(RunCommand.class)
-                    && !c.getClass().equals(ParallelCommandGroup.class)
-                    && !c.getClass().equals(SequentialCommandGroup.class))
+                    && !(c instanceof RunCommand)
+                    && !(c instanceof WaitCommand)
+                    && !(c instanceof ParallelCommandGroup))
                 return;
         }
         command.init();
@@ -48,6 +57,11 @@ public final class CommandScheduler {
     // probably not the most efficient way of scheduling, but works pretty well for what we need
     public void run() throws InterruptedException {
         ArrayList<Subsystem> idleSubsystems = new ArrayList<>(subsystems);
+
+        // run subsystem periodic
+        for (Subsystem subsystem : subsystems) {
+            subsystem.periodic(telemetry);
+        }
 
         for (int i = 0; i < commands.size(); i++) {
             Command command = commands.get(i);
@@ -64,11 +78,12 @@ public final class CommandScheduler {
             }
             if (!canRun) continue;
 
-            command.execute();
-
+            // after ensuring command subsystems are idle, make them no longer idle
             for (Subsystem subsystem : commandSubsystems) {
                 idleSubsystems.remove(subsystem);
             }
+
+            command.execute();
 
             if (command.isFinished()) {
                 command.end();
@@ -89,56 +104,5 @@ public final class CommandScheduler {
             Command defaultCommand = subsystem.getDefaultCommand();
             if (defaultCommand != null) defaultCommand.execute();
         }
-
-        for (Subsystem subsystem : subsystems) {
-            subsystem.periodic(telemetry);
-        }
-
-
-//        for (int i = 0; i < commands.size(); i++) {
-//            Command command = commands.get(i);
-//            command.execute();
-//            if (command.isFinished()) {
-//                command.end();
-//                commands.remove(i);
-//                i--;
-//            }
-//        }
-
-        // collapse subsystem current commands into array and then execute array, delete above
-        // essentially gather commands to execute on each loop, including default commands
-
-//        ArrayList<Command> commandsToRun = new ArrayList<>();
-//
-//        for (Subsystem subsystem : subsystems) {
-//            subsystem.periodic(telemetry);
-//
-//            Command command = subsystem.getCurrentCommand();
-//            // if current command is null, switch to default
-//            if (command == null) {
-//                command = subsystem.resetToDefault();
-//                // if default is also null, continue to next subsystem (no commands to run for subsystem)
-//                if (command == null) continue;
-//            }
-//
-//            // if the command is finished, execute it if it hasnt, and reset to default command and continue
-//            // doing this to avoid circular dependencies down the road
-//            if (command.isFinished() && !command.hasShutdown()) {
-//                command.execute();
-//                command.end();
-//                command.shutdown();
-//                subsystem.resetToDefault();
-//                continue;
-//            }
-//
-//            // if command hasnt been added yet, add it
-//            if (!commandsToRun.contains(command)) {
-//                commandsToRun.add(command);
-//            }
-//        }
-//
-//        for (Command command : commandsToRun) {
-//            command.execute();
-//        }
     }
 }
