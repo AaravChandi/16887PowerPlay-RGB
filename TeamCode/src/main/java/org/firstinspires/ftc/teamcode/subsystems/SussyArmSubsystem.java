@@ -42,6 +42,9 @@ public class SussyArmSubsystem extends Subsystem {
         } else if (this.state == State.MEDIUM && this.prevState == State.HIGH) {
             this.prevState = State.MEDIUM;
             setState(State.LOW);
+        } else {
+            this.prevState = State.LOW;
+            setState(State.LOW);
         }
     }
 
@@ -53,7 +56,17 @@ public class SussyArmSubsystem extends Subsystem {
 
     @Override
     public void periodic(Telemetry telemetry){
-
+        switch (state) {
+            case LOW:
+                linearSlide.setPosition(50);
+                break;
+            case MEDIUM:
+                linearSlide.setPosition(2900);
+                break;
+            case HIGH:
+                linearSlide.setPosition(3825);
+                break;
+        }
     }
 
 }
