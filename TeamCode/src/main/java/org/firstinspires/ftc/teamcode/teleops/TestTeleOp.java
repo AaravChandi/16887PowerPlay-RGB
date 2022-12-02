@@ -118,8 +118,7 @@ private int desiredPosition;
             else if (claw.isClawOpen() && arm.getState() == ArmSubsystem.State.TOP){
                 arm.setState(ArmSubsystem.State.BOTTOM);
             }
-
-
+            debounce = Clock.now();
 
         }));
 
