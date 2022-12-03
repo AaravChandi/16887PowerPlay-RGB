@@ -30,7 +30,7 @@ public class OneConeRightAuto extends BaseRobot {
     RRMecanumDrive drive;
     Trajectory trajStrafeLeft1, trajForward1, trajShaftPoleApproach, trajStrafePoleRetreat,
             trajBack1, trajToStack, trajToBackToPole1, trajToBackToPole2, trajStrafeLeft,
-            trajFrontPark, trajPark3, trajPark2;
+            trajFrontPark, trajPark3, trajPark2, trajTagFor, trajTagBack;
 
     @Override
     public void init() {
@@ -48,17 +48,23 @@ public class OneConeRightAuto extends BaseRobot {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
+        trajTagFor = drive.trajectoryBuilder(startPos)
+                .forward(10)
+                .build();
+        trajTagBack = drive.trajectoryBuilder(startPos)
+                .back(10)
+                .build();
         trajStrafeLeft1 = drive.trajectoryBuilder(startPos)
-                .strafeLeft(-30)
+                .strafeLeft(-33)
                 .build();
         trajForward1 = drive.trajectoryBuilder(startPos)
-                .forward(31.5)
+                .forward(37)
                 .build();
         trajShaftPoleApproach = drive.trajectoryBuilder(startPos)
-                .strafeLeft(-1)
+                .strafeLeft(-3)
                 .build();
         trajStrafePoleRetreat = drive.trajectoryBuilder(startPos)
-                .strafeRight(-2)
+                .strafeRight(-7)
                 .build();
         trajBack1 = drive.trajectoryBuilder(startPos)
                 .back(15)
@@ -76,15 +82,15 @@ public class OneConeRightAuto extends BaseRobot {
                 .strafeLeft(-20)
                 .build();
         trajFrontPark = drive.trajectoryBuilder(startPos)
-                .forward(10)
+                .forward(15)
                 .build();
         trajPark2 = drive.trajectoryBuilder(startPos)
-                .strafeRight(-25)
+                .strafeRight(-30)
                 .build();
         trajPark3 = drive.trajectoryBuilder(startPos)
-                .strafeRight(-55)
+                .strafeRight(-60)
                 .build();
-        claw.setState(ClawSubsystem.State.CLOSED);
+
 
     }
 
@@ -93,14 +99,19 @@ public class OneConeRightAuto extends BaseRobot {
 //TODO: Do wait commands????
 
         CommandScheduler.getInstance().scheduleCommand(
-                new FindAprilTagCommand(vision)
+                new RunCommand(() -> {
+                    claw.setState(ClawSubsystem.State.CLOSED);
+                }).then(new WaitCommand(1))
+                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.CARRYING))
                         .then(new RunCommand(() -> {
-                            claw.setState(ClawSubsystem.State.CLOSED);
-                        }))
+                                    drive.followTrajectoryAsync(trajTagFor);
+                                })
+                        ).then(new WaitCommand(trajTagFor.duration()))
+                        .then(new FindAprilTagCommand(vision))
                         .then(new RunCommand(() -> {
-                            claw.setState(ClawSubsystem.State.CLOSED);
-                        }))
-                        .then(new WaitCommand(3))
+                                    drive.followTrajectoryAsync(trajTagBack);
+                                })
+                        ).then(new WaitCommand(trajTagBack.duration()))
                         //position
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajStrafeLeft1);
