@@ -42,7 +42,7 @@ public class DriveSubsystem extends Subsystem {
         drive.mecanum(bias*vector.getX(), bias*vector.getY(), bias*0.8*rightX); // field oriented
     }
     public void setDriveBias(double driveBias) {
-        bias = Range.clip(driveBias, 0.4, 1.0);
+        bias = Range.clip(driveBias, 0.25, 0.45);
     }
 
     public void normalmecanum(double leftY, double leftX, double rightX) {

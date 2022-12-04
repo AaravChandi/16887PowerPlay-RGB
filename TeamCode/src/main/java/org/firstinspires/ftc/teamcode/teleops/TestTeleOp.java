@@ -104,18 +104,21 @@ private int desiredPosition;
 
         new Trigger(gamepad1.a, new RunCommand(() -> {
             if (!Clock.hasElapsed(debounce, 0.5)) return;
-            if (claw.isClawOpen() && arm.getState() == ArmSubsystem.State.BOTTOM) {
+            if (claw.isClawOpen() && (arm.getState() == ArmSubsystem.State.BOTTOM)) {
                     claw.setState(ClawSubsystem.State.CLOSED);
                     CommandScheduler.getInstance().scheduleCommand(
-                            new WaitCommand(0.15)
+                            new WaitCommand(0.3)
                             .then(new RunCommand(() -> {
                                 arm.setState(ArmSubsystem.State.TOP);
                             })));
             }
-            else if (!claw.isClawOpen() && arm.getState() == ArmSubsystem.State.TOP) {
+            else if (!claw.isClawOpen() && arm.getState() == ArmSubsystem.State.BOTTOM) {
                 claw.setState(ClawSubsystem.State.OPEN);
             }
-            else if (claw.isClawOpen() && arm.getState() == ArmSubsystem.State.TOP){
+            else if (!claw.isClawOpen() && (arm.getState() == ArmSubsystem.State.TOP || arm.getState() == ArmSubsystem.State.MANUAL)) {
+                claw.setState(ClawSubsystem.State.OPEN);
+            }
+            else if (claw.isClawOpen() && (arm.getState() == ArmSubsystem.State.TOP || arm.getState() == ArmSubsystem.State.MANUAL)){
                 arm.setState(ArmSubsystem.State.BOTTOM);
             }
             debounce = Clock.now();
