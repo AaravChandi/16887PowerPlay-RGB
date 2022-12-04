@@ -58,7 +58,7 @@ public class OneConeLeftAuto extends BaseRobot {
                 .strafeRight(-29)
                 .build();
         trajForward1 = drive.trajectoryBuilder(startPos)
-                .forward(56)
+                .forward(48)
                 .build();
         trajShaftPoleApproach = drive.trajectoryBuilder(startPos)
                 .strafeLeft(-1)

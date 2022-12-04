@@ -47,10 +47,10 @@ public class RightPosAuto extends BaseRobot {
         telemetry.update();
 
         trajForward1 = drive.trajectoryBuilder(startPos)
-                .forward(78)
+                .forward(50)
                 .build();
         trajBack1 = drive.trajectoryBuilder(startPos)
-                .back(40)
+                .back(15)
                 .build();
         trajStrafeRight = drive.trajectoryBuilder(startPos)
                 .strafeLeft(-40)
@@ -85,24 +85,7 @@ public class RightPosAuto extends BaseRobot {
                         //cone
                         .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP))
                         .then(new WaitCommand(trajForward1.duration()))
-                        .then(new RunCommand(() -> {
-                                    drive.followTrajectoryAsync(trajShaftPoleApproach);
-                                })
-                        ).then(new WaitCommand(trajShaftPoleApproach.duration()))
-                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_TOP))
-                        .then(new InteractWithConeCommand(claw, InteractWithConeCommand.State.OUT))
-                        .then(new RunCommand(() -> {
-                                    drive.followTrajectoryAsync(trajStrafePoleRetreat);
-                                })
-                        ).then(new WaitCommand(trajStrafePoleRetreat.duration()))
-                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
 
-                        //park
-                        .then(new RunCommand(() -> {
-                                    drive.followTrajectoryAsync(trajStrafePoleRetreat);
-                                })
-                        ).then(new WaitCommand(trajStrafePoleRetreat.duration()))
-                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
                         .then(new RunCommand(() -> {
                                     drive.followTrajectoryAsync(trajBack1);
                                 })
