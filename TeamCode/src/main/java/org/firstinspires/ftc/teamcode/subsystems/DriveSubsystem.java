@@ -41,8 +41,10 @@ public class DriveSubsystem extends Subsystem {
 
         drive.mecanum(bias*vector.getX(), bias*vector.getY(), bias*0.8*rightX); // field oriented
     }
-    public void setDriveBias(double driveBias) {
-        bias = Range.clip(driveBias, 0.25, 0.45);
+
+
+    public void setDriveBias(double driveBias, double add) {
+        bias = Range.clip(driveBias, 0.25+add, 0.45+add);
     }
 
     public void normalmecanum(double leftY, double leftX, double rightX) {
@@ -51,11 +53,11 @@ public class DriveSubsystem extends Subsystem {
 
     @Override
     public void periodic(Telemetry telemetry) {
-        telemetry.addData("heading: ", Math.toDegrees(imu.getYaw()));
-        telemetry.addData("leftFront: ", drive.motors[0].getPosition(MotorUnit.TICKS));
-        telemetry.addData("leftRear: ", drive.motors[1].getPosition(MotorUnit.TICKS));
-        telemetry.addData("rightFront: ", drive.motors[2].getPosition(MotorUnit.TICKS));
-        telemetry.addData("rightRear: ", drive.motors[3].getPosition(MotorUnit.TICKS));
+//        telemetry.addData("heading: ", Math.toDegrees(imu.getYaw()));
+//        telemetry.addData("leftFront: ", drive.motors[0].getPosition(MotorUnit.TICKS));
+//        telemetry.addData("leftRear: ", drive.motors[1].getPosition(MotorUnit.TICKS));
+//        telemetry.addData("rightFront: ", drive.motors[2].getPosition(MotorUnit.TICKS));
+//        telemetry.addData("rightRear: ", drive.motors[3].getPosition(MotorUnit.TICKS));
 
     }
 

@@ -26,7 +26,7 @@ public final class Constants {
         public static final double OFFSET = 0;
         public static final String K_SLIDE_NAME = "slide";
 
-        public static final double K_SLIDE_P = 15;
+        public static final double K_SLIDE_P = 20; // 15 best value
         public static final double K_SLIDE_TOLERANCE = 0.05;
         public static final double K_SLIDE_MAX_VELOCITY = 1;
         public static final double K_SLIDE_G = 0.2; //THIS MIGHT BE AN ISSUE

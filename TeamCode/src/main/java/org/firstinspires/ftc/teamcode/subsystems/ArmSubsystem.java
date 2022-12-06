@@ -118,7 +118,7 @@ public class ArmSubsystem extends Subsystem {
     @Override
     public void periodic(Telemetry telemetry) {
         telemetry.addData("slide ticks: ", slide.getPosition(MotorUnit.TICKS));
-        telemetry.addData("time: ", Clock.elapsed(previousTime));
+        telemetry.addData("DIFFERENCE: ", Constants.Arm.K_SLIDE_TOP - slide.getPosition(MotorUnit.TICKS));
 //        telemetry.addData("profile output: ", slide.followProfile(Clock.elapsed(previousTime)));
         if (!override) {
             switch (state) {
