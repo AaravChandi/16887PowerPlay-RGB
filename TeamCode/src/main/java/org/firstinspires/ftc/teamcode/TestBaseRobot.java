@@ -26,8 +26,8 @@ import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
 public class TestBaseRobot extends OpMode {
     // Declare subsystems and devices
-    public ArmSubsystem arm;
     public double previousTime = 0;
+    public DriveSubsystem drive;
 
     // Called when you press the init button
     @Override
@@ -37,9 +37,10 @@ public class TestBaseRobot extends OpMode {
 
         // Assigns telemetry object for Subsystem.periodic - DO NOT DELETE!
         CommandScheduler.getInstance().setTelemetry(telemetry);
+        drive = new DriveSubsystem(hardwareMap);
 
         // Initialize your subsystems and devices
-        arm = new ArmSubsystem(hardwareMap);
+        //arm = new ArmSubsystem(hardwareMap);
 //        intake = new SHPMotor(hardwareMap, "intake");
 //        scissorsystem = new ScissorSubsystem(hardwareMap);
 
@@ -56,7 +57,8 @@ public class TestBaseRobot extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("Loop Time (ms): ", Clock.elapsed(previousTime) * 1000);
-        telemetry.addData("Number of Stacked Cones Left", arm.coneLevel);
+        telemetry.addData("Loop Time (ms): ", drive.imu.getYaw());
+
         previousTime = Clock.now();
 
         // Handles all subsystem and command execution - DO NOT DELETE!

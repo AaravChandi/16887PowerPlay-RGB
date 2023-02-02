@@ -27,6 +27,7 @@ import org.openftc.apriltag.AprilTagDetection;
 public class OneConeLeftAuto extends BaseRobot {
     int currentTag;
     DriveSubsystem findOffset;
+
     RRMecanumDrive drive;
     Trajectory trajStrafeRight1, trajForward1, trajShaftPoleApproach, trajStrafePoleRetreat,
             trajBack1, trajToStack, trajToBackToPole1, trajToBackToPole2, trajStrafeLeft,

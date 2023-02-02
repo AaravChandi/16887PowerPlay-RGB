@@ -142,7 +142,7 @@ public class TwoConeLeftAuto extends BaseRobot {
                         .then(new RunCommand(() -> {
                             drive.followTrajectoryAsync(trajBack);
                         })).then(new WaitCommand(trajBack.duration()))
-                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
+                        .then(new MoveArmCommand(arm, MoveArmCommand.Direction.TOP_OF_SHORT))
                         .then(new RunCommand(() -> {
                             drive.followTrajectoryAsync(trajStrafeStack);
                         })).then(new WaitCommand(trajStrafeStack.duration()))
@@ -164,9 +164,7 @@ public class TwoConeLeftAuto extends BaseRobot {
                         .then(new RunCommand(() -> {
                             drive.followTrajectoryAsync(trajStrafePole);
                         })).then(new WaitCommand(trajStrafePole.duration()))
-                        .then(new RunCommand(() -> {
-                            drive.turn(90);
-                        })).then(new WaitCommand(2))
+                        .then(new WaitCommand(2))
                         .then(new RunCommand(() -> {
                             drive.followTrajectoryAsync(trajShaftPoleApproach);
                         })).then(new WaitCommand(trajShaftPoleApproach.duration()))

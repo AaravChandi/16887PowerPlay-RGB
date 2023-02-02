@@ -5,8 +5,8 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
-import org.firstinspires.ftc.teamcode.commands.InteractWithConeCommand;
 import org.firstinspires.ftc.teamcode.commands.FindAprilTagCommand;
+import org.firstinspires.ftc.teamcode.commands.InteractWithConeCommand;
 import org.firstinspires.ftc.teamcode.commands.MoveArmCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.RRMecanumDrive;
@@ -22,15 +22,15 @@ import org.openftc.apriltag.AprilTagDetection;
  */
 
 
-@Autonomous (name = "OneConeRightAuto", group = "Autonomous", preselectTeleOp="TestTeleOp")
+@Autonomous
 
-public class OneConeRightAuto extends BaseRobot  {
+public class TwoConeRightAuto extends BaseRobot {
     int currentTag;
     DriveSubsystem findOffset;
     RRMecanumDrive drive;
     Trajectory trajStrafeLeft1, trajForward1, trajShaftPoleApproach, trajStrafePoleRetreat,
             trajBack1, trajToStack, trajToBackToPole1, trajToBackToPole2, trajStrafeLeft,
-            trajFrontPark, trajPark3, trajPark2, trajTagFor, trajTagBack;
+            trajFrontPark, trajPark3, trajPark2, trajTagFor, trajTagBack, trajApproachCones;
 
     @Override
     public void init() {
@@ -82,13 +82,17 @@ public class OneConeRightAuto extends BaseRobot  {
                 .strafeLeft(-20)
                 .build();
         trajFrontPark = drive.trajectoryBuilder(startPos)
-                .forward(12)
+                .forward(6)
                 .build();
+
         trajPark2 = drive.trajectoryBuilder(startPos)
                 .strafeRight(-30)
                 .build();
         trajPark3 = drive.trajectoryBuilder(startPos)
                 .strafeRight(-60)
+                .build();
+        trajApproachCones = drive.trajectoryBuilder(startPos)
+                .strafeLeft(-100)
                 .build();
 
 
@@ -145,6 +149,10 @@ public class OneConeRightAuto extends BaseRobot  {
                         .then(new RunCommand(() -> {
                             drive.followTrajectoryAsync(trajFrontPark);
                         })).then(new WaitCommand(trajFrontPark.duration()))
+                        .then(new RunCommand(() -> {
+                            drive.turnAsync(Math.toRadians(180));
+                        })).then(new WaitCommand(2))
+
                         .then(new RunCommand(() -> {
                             if(vision.getTags().get(0).id == 8){
                                 drive.followTrajectoryAsync(trajPark2);

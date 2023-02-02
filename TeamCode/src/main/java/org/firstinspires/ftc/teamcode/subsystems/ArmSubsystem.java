@@ -17,7 +17,7 @@ public class ArmSubsystem extends Subsystem {
     public final SHPMotor slide;
     public boolean override;
     public int coneLevel;
-    private int manualPosition;
+    private double manualPosition;
 
     public enum State {
         TOP,
@@ -78,13 +78,18 @@ public class ArmSubsystem extends Subsystem {
         else if (this.state == State.STACKED_CONES) setState(State.MIDDLE);
     }
 
-    public void setManualPos(int encoderValue) {
+    public void setManualPos(double encoderValue) {
+
+        if (encoderValue < Constants.Arm.K_SLIDE_BOTTOM)
+            manualPosition = Constants.Arm.K_SLIDE_BOTTOM;
+        if (encoderValue > Constants.Arm.K_SLIDE_TOP + 100)
+            manualPosition = Constants.Arm.K_SLIDE_BOTTOM;
         manualPosition = encoderValue;
         this.state = State.MANUAL;
 
     }
 
-    public int getManualPosition() {
+    public double getManualPosition() {
         return manualPosition;
     }
 
@@ -151,7 +156,7 @@ public class ArmSubsystem extends Subsystem {
                     slide.setPosition(Constants.Arm.K_SLIDE_TOP - 500);
                     break;
                 case STACKED_CONES:
-                    slide.setPosition(Constants.Arm.K_SLIDE_BOTTOM + coneLevel*200);
+                    slide.setPosition(coneLevel*160);
                     break;
                 case MANUAL:
                     slide.setPosition(manualPosition);

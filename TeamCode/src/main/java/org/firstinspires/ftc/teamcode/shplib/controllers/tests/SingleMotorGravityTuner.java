@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class SingleMotorGravityTuner extends LinearOpMode {
 
     private final String kMotorName = "slide";
-    private final double kS = 0.0;
+//    private final double kS = 0.0;
 
     private final double kDebounceTime = 100;
 
@@ -25,8 +25,8 @@ public class SingleMotorGravityTuner extends LinearOpMode {
     public void runOpMode() {
         ElapsedTime debouncer = new ElapsedTime();
         SHPMotor motor = new SHPMotor(hardwareMap, kMotorName);
-        motor.enableFF(new FFController(kS));
-//        motor.reverseDirection(); // delete later, dependent on motor
+//        motor.enableFF(new FFController(kS));
+        motor.reverseDirection(); // delete later, dependent on motor
 
         double power = 0.0;
 
