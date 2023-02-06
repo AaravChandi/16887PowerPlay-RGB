@@ -67,6 +67,9 @@ public class ArmSubsystem extends Subsystem {
     public double getDriveBias() {
         if (slide.getPosition(MotorUnit.TICKS)>3500)
             return Math.abs(slide.getPosition(MotorUnit.TICKS) / Constants.Arm.K_SLIDE_TOP - 1.0);
+        else if (getState() == State.MIDDLE) {
+            return 0.5;
+        }
         else
             return 0.8;
     }
@@ -82,8 +85,8 @@ public class ArmSubsystem extends Subsystem {
 
         if (encoderValue < Constants.Arm.K_SLIDE_BOTTOM)
             manualPosition = Constants.Arm.K_SLIDE_BOTTOM;
-        if (encoderValue > Constants.Arm.K_SLIDE_TOP + 100)
-            manualPosition = Constants.Arm.K_SLIDE_BOTTOM;
+        if (encoderValue > Constants.Arm.K_SLIDE_TOP + 200)
+            manualPosition = Constants.Arm.K_SLIDE_TOP;
         manualPosition = encoderValue;
         this.state = State.MANUAL;
 
@@ -98,7 +101,10 @@ public class ArmSubsystem extends Subsystem {
     }
 
     public void incrementConeLevelDown() {
-        coneLevel--;
+        if (coneLevel <= 0)
+            coneLevel = 5;
+        else
+            coneLevel--;
     }
     public void incrementConeLevelUp() {
         coneLevel++;

@@ -69,8 +69,7 @@ private ArmSubsystem.State topState;
                 .then(new RunCommand(( () -> {topState = ArmSubsystem.State.TOP;}))));
 
         new Trigger(gamepad1.dpad_down, new RunCommand(( () -> {arm.override = false;}))
-                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM))
-                .then(new RunCommand(( () -> {topState = ArmSubsystem.State.BOTTOM;}))));
+                .then(new MoveArmCommand(arm, MoveArmCommand.Direction.BOTTOM)));
 
 
         //setting top position
@@ -82,6 +81,10 @@ private ArmSubsystem.State topState;
                 new RunCommand(( () -> {topState = ArmSubsystem.State.MIDDLE;})));
         new Trigger(gamepad2.y,
                 new RunCommand(( () -> {topState = ArmSubsystem.State.TOP;})));
+        new Trigger(gamepad2.dpad_up,
+                new RunCommand(( () -> {arm.incrementConeLevelUp();})));
+        new Trigger(gamepad2.dpad_down,
+                new RunCommand(( () -> {arm.incrementConeLevelDown();})));
 
         //KEEP FOR NOW INCASE AARAV CODE DOES NOT WORK WHICH IT PROBABLY WILL NOT
         /*new Trigger(gamepad1.right_bumper, new DumpCargoCommand(scoop, DumpCargoCommand.State.IN)
@@ -92,7 +95,7 @@ private ArmSubsystem.State topState;
                 .then(new DumpCargoCommand(scoop, DumpCargoCommand.State.OUT))
         );*/
 
-        new Trigger(gamepad1.b, new RunCommand(() -> {
+        /*new Trigger(gamepad1.b, new RunCommand(() -> {
             if (!Clock.hasElapsed(debounce, 0.3)) return;
             if (claw.isClawOpen()) {
                 if (arm.getState() == ArmSubsystem.State.BOTTOM) {
@@ -122,7 +125,7 @@ private ArmSubsystem.State topState;
                 claw.setState(ClawSubsystem.State.OPEN);
             }
             debounce = Clock.now();
-        }));
+        }));*/
 
 
 
@@ -158,7 +161,14 @@ private ArmSubsystem.State topState;
                                 .then(new RunCommand(() -> {
                                     arm.setState(ArmSubsystem.State.SHORT);
 
-                                })));
+                                }))
+                                .then(new WaitCommand(0.75))
+                                .then(new RunCommand(() -> {
+                                    arm.setState(topState);
+
+                                }))
+
+                );
             }
             else if (claw.isClawOpen() && (arm.getState() == ArmSubsystem.State.BOTTOM)) {
                 claw.setState(ClawSubsystem.State.CLOSED);
@@ -175,7 +185,7 @@ private ArmSubsystem.State topState;
             else if (!claw.isClawOpen() && arm.getState() != ArmSubsystem.State.BOTTOM) {    // (arm.getState() == topState || (!claw.isClawOpen() && arm.getState() == ArmSubsystem.State.MANUAL))
                 claw.setState(ClawSubsystem.State.OPEN);
                 CommandScheduler.getInstance().scheduleCommand(
-                        new WaitCommand(0.5)
+                        new WaitCommand(0.75)
                                 .then(new RunCommand(() -> {
                                     arm.setState(ArmSubsystem.State.BOTTOM);
                                 })));
@@ -214,6 +224,16 @@ private ArmSubsystem.State topState;
             debounce = Clock.now();
             if (Clock.hasElapsed(debounce, 0.5)) arm.incrementConeLevelDown();
 
+        }));
+
+        new Trigger(gamepad1.b, new RunCommand(() -> {
+            if (!Clock.hasElapsed(debounce, 0.3)) return;
+            if (claw.isClawOpen()) {
+                claw.setState(ClawSubsystem.State.CLOSED);
+            }
+            else {
+                claw.setState(ClawSubsystem.State.OPEN);
+            }
         }));
 
     }
